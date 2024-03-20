@@ -1,0 +1,82 @@
+.fullbody{
+  margin-left: 9%;
+  padding: 5%;
+  width: 70%;
+  margin-bottom: 200px;
+  font-family: Inter, sans-serif;
+}
+
+.icon{
+  margin: 5px;
+  /* background-color: aquamarine; */
+}
+.plusebutton{
+  margin-left: 92%;
+  color: rgb(184, 175, 175) ;
+  position: relative;
+  bottom: 48px;
+}
+.searchinput{
+  width: 35% ;
+  border-radius: 5px;
+  height: 35px;
+  margin-bottom: 100px;
+  
+  
+}
+.addbutton{
+  
+  margin-left: 100%;
+  /* margin-bottom: px; */
+ position: relative;
+top: 45px;
+  
+}
+.filterbutton{
+margin-left: 70%;
+margin-top: 10px;
+
+
+}
+.image{
+ width: 50%;
+ height: auto;
+
+}
+
+/* .cardbody{
+  width: 50%;
+  margin-left:25% ;
+  margin-bottom: 10%;
+  margin-top: 7%;
+}
+.cardbodyone{
+  width: 80%;
+  margin-left: 10%;
+} */
+
+.date{
+  position: relative;
+  right: 25%;
+  font-weight: bold;
+}
+
+.new{
+position: relative;
+bottom: 40px;
+border: none; 
+background-color: #E1FBF4 !important;
+color: #4dff00 !important;
+}
+.deteleicon{
+ position: relative;
+ left: 90%;
+ position: relative;
+  bottom: 45px;
+  color: red;
+}
+
+.dateandnew{
+  position: relative;
+  top: 25px;
+}
