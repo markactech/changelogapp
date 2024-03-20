@@ -47,10 +47,10 @@ const Form = ({ setBlogPost, blogpost, onCancel, removePost }) => {
   };
 
   return (
-    <div className="container  mb-2" style={{ width: "50%" }}>
+    <div className="container  mb-2" style={{ width: "101%" }}>
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Add New Image</h5>
+          <h5 className="card-title">Add New Blog</h5>
           <input
             type="text"
             className="form-control mb-2"

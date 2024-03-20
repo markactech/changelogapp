@@ -41,17 +41,21 @@ export default function SearchInput() {
             <Dropdown className={styles.filterbutton}>
               <Dropdown.Toggle
                 variant="outline-light"
-                style={{ color: "black", border: "1px solid black" }}
+                style={{ color: "black", border: "1px solid #EEF0F2" }}
               >
                 <CiFilter style={{ marginBottom: "10px", margin: "5px" }} />
                 Filters
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
+              <Dropdown.Menu className={styles.filterdropdown}>
+                <p>Filter</p>
                 {/* Add Dropdown.Item components for each filter option */}
-                <Dropdown.Item>Action</Dropdown.Item>
-                <Dropdown.Item>Another action</Dropdown.Item>
-                <Dropdown.Item>Something else</Dropdown.Item>
+                <hr />
+                <Dropdown.Item>New</Dropdown.Item>
+                <Dropdown.Item>All entries</Dropdown.Item>
+                <Dropdown.Item>Improved</Dropdown.Item>
+                <Dropdown.Item>Fixed</Dropdown.Item>
+                
               </Dropdown.Menu>
             </Dropdown>
           </Col>

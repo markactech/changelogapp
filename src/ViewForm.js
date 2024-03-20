@@ -22,18 +22,18 @@ function ViewForm({ blogpost, onRemove }) {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-4">
       <hr />
       {blogpost.map((post) => (
         <>
         <div
           key={post.id}
           className="mb-5"
-          style={{ borderRadius: "8px", margin: "6%", marginLeft: "20%" }}
+          style={{ borderRadius: "8px", margin: "2%", marginLeft: "20%" }}
         >
           <div className={styles.dateandnew}>
             <p className={styles.date}>{getCurrentDate()}</p>{" "}
-            <Badge className={styles.new} pill  style={{color:"white"}} >New</Badge>
+            <Badge className={styles.new} pill  style={{}} >New</Badge>
           </div>{" "}
           {/* Display current date */}
           <div className="d-flex justify-content-between align-items-center mb-1">

@@ -1,5 +1,5 @@
 .fullbody{
-  margin-left: 9%;
+  margin-left: 15%;
   padding: 5%;
   width: 70%;
   margin-bottom: 200px;
@@ -11,7 +11,7 @@
   /* background-color: aquamarine; */
 }
 .plusebutton{
-  margin-left: 92%;
+  margin-left: 87%;
   color: rgb(184, 175, 175) ;
   position: relative;
   bottom: 48px;
@@ -26,14 +26,14 @@
 }
 .addbutton{
   
-  margin-left: 100%;
+  margin-left: 93%;
   /* margin-bottom: px; */
  position: relative;
-top: 45px;
+top: 46px;
   
 }
 .filterbutton{
-margin-left: 70%;
+margin-left: 73%;
 margin-top: 10px;
 
 
@@ -58,19 +58,19 @@ margin-top: 10px;
 .date{
   position: relative;
   right: 25%;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 .new{
 position: relative;
 bottom: 40px;
 border: none; 
-background-color: #E1FBF4 !important;
-color: #4dff00 !important;
+background-color: #00ffbb !important;
+color: hsla(0, 0%, 100%, 0.754) !important;
 }
 .deteleicon{
  position: relative;
- left: 90%;
+ left: 85%;
  position: relative;
   bottom: 45px;
   color: red;
@@ -79,4 +79,11 @@ color: #4dff00 !important;
 .dateandnew{
   position: relative;
   top: 25px;
+}
+
+.filterdropdown{
+  width: 150%;
+  height: 200px;
+  /* margin: 10px; */
+  padding: 10%;
 }
