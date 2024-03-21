@@ -3,10 +3,11 @@ import { CiWifiOn } from "react-icons/ci";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import styles from "./App.module.css";
 function Header() {
   return (
     <header>
-      <Container>
+      <Container className="me-3 mt-4">
         <Row>
           <h1>Changelog</h1>
           <p>

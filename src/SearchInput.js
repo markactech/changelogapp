@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import styles from "./App.module.css";
 import { Dropdown } from "react-bootstrap";
 
+
 export default function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -20,12 +21,14 @@ export default function SearchInput() {
     <div>
       <Container>
         <Row className="justify-content-end ">
-          <Col className="mt-3">
+          <Col className="mt-2 ">
+          
             <div className="input-group">
               <input
+              
                 type="text"
                 className="form-control"
-                style={{ width: "80%" }}
+                style={{ width: "10px",position:"relative" , left:"14%" }}
                 aria-label="Text input with radio button"
                 placeholder="Search Entries..."
                 value={searchTerm}

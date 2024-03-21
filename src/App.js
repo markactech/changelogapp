@@ -1,50 +1,27 @@
 import React, { useState } from "react";
-import Add from "./Add";
-import SearchInput from "./SearchInput";
-import Header from "./Header";
-import Form from "./Form";
+ 
 import ViewForm from "./ViewForm";
-import { MdCancel } from "react-icons/md";
-import Button from "react-bootstrap/Button";
-import styles from "./App.module.css";
+  
+import {  Route, Routes } from "react-router-dom";
+import form from './AddLogForm'
+import AddLogForm from "./AddLogForm";
+import Layout from "./component/Layout";
+import Header from "./Header";
 
 function App() {
-  const [showForm, setShowForm] = useState(false);
-  const [blogpost, setBlogPost] = useState([]);
-  const toggleForm = () => {
-    setShowForm(true);
-  };
-  const handleRemovePost = (postId) => {
-    // Filter out the post with the given postId
-    const updatedPosts = blogpost.filter(post => post.id !== postId);
-    // Update the state with the filtered posts
-    setBlogPost(updatedPosts);
-  };
+  
   return (
-    <div className={styles.fullbody}>
-      <div className="container">
-        {!showForm && (
-          <Button variant="primary" className={styles.addbutton} onClick={toggleForm}>
-            Add
-          </Button>
-        )}
-
-        {showForm && (
-          <div>
-            <Form
-              setBlogPost={setBlogPost}
-              blogpost={blogpost}
-              onCancel={setShowForm}
-            />
-          </div>
-        )}
-      </div>
-
-      <Header />
-      <SearchInput />
-      <ViewForm blogpost={blogpost}  onRemove={handleRemovePost}/>
-    </div>
-  );
+       <Routes> 
+        <Route path="/" exact  element={<Layout/>}>
+        {/* <Route path="/form" exact  element={<Form/>}/>= */}
+        <Route path="/" exact  element={<ViewForm/>}/>
+        <Route path="/addlogs" exact  element={<AddLogForm/>}/>
+        <Route path="/preview/id" exact  element={<AddLogForm/>}/>
+        </Route>
+       
+      </Routes>
+    
+   );
 }
 
 export default App;

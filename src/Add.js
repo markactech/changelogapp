@@ -1,29 +1,26 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
-import Button from 'react-bootstrap/Button';
-import { MdCancel } from "react-icons/md";
-import Form from "./Form";
+import Button from "react-bootstrap/Button";
 import styles from "./App.module.css";
+ 
 function Add() {
-  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
-  const toggleForm = () => {
-    setShowForm(!showForm);
+  const navigateToAnotherComponent = () => {
+    navigate("/addlogs");
   };
 
   return (
     <div>
       <Container>
-        {!showForm && (
-          <Button variant="primary" className={styles.addbutton}  onClick={toggleForm}>
-            Add
-          </Button>
-        )}
-        {showForm && (
-          <div>
-            <Form onCancel={setShowForm} />
-          </div>
-        )}
+        <Button
+          variant="primary"
+          className={styles.addbutton}
+          onClick={navigateToAnotherComponent}
+        >
+          Add
+        </Button>
       </Container>
     </div>
   );
