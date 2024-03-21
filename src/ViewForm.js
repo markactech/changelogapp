@@ -48,8 +48,11 @@ function ViewForm() {
       console.error("Error deleting post:", error);
     }
   };
-  const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
+  const baseURL = 'http://localhost:8080'; // Update this with your actual backend URL
 
+   
+  // Construct the full URL
+  const i
   return (
     <>
       <SearchInput />
@@ -104,14 +107,13 @@ function ViewForm() {
                 ) : (
                   <p>{post.description.substring(0, 100)}</p>
                 )}
-             {showFullDescription[post.id] && post.imageUrl && (
- <img
-    src={`${'http://localhost:8080'}/${post.imageUrl.replace(/\\/g, '/')}`}
-    alt="Preview"
-    className={styles.image}
-  />
-)} 
-
+                {showFullDescription[post.id] && (
+                  <img
+                    src={post.imageUrl}
+                    alt="Preview"
+                    className={styles.image}
+                  />
+                )}
 
                 {/* Conditionally render the image */}
               </div>
