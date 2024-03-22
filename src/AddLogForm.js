@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import { MdCancel } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import Axios library
-
+import styles from "./App.module.css";
 const AddLogForm = ({ setBlogPost }) => {
   const [newImageTitle, setNewImageTitle] = useState("");
   const [newImageDescription, setNewImageDescription] = useState("");
@@ -12,7 +12,9 @@ const AddLogForm = ({ setBlogPost }) => {
   const [newImageFile, setNewImageFile] = useState(null);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
 
+  console.log("newImageFile",newImageFile)
   const handleAddImage = async () => {
     if (
       newImageTitle.trim() !== "" &&
@@ -27,6 +29,7 @@ const AddLogForm = ({ setBlogPost }) => {
         formData.append("email", email);
         formData.append("image", newImageFile);
 
+        console.log("formData *********",formData)
         const response = await axios.post(
           "http://localhost:8080/posts",
           formData,
@@ -67,18 +70,24 @@ const AddLogForm = ({ setBlogPost }) => {
   };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log("file",file)
     setNewImageFile(file);
   };
 
   const onCancelLog = () => {
     navigate("/");
   };
+  const togglePreview = () => {
+    setShowPreview(!showPreview);
+  };
+  
 
   return (
+    <div  >
     <div className="container mb-2" style={{ width: "101%" }}>
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title">Add New Blog</h5>
+          <h5 className="card-title">Add New ChangeLog</h5>
           <input
             type="text"
             className="form-control mb-2"
@@ -102,13 +111,15 @@ const AddLogForm = ({ setBlogPost }) => {
             onChange={(e) => setNewImageDescription(e.target.value)}
           />
           
-          {/* Display the image URL if available */}
-          {newImageUrl && (
-            <div>
-              <p>Image URL: {newImageUrl}</p>
-              <img src={newImageUrl} alt="Uploaded" style={{ maxWidth: "100%" }} />
-            </div>
-          )}
+          {/* Display the image preview */}
+          {/* <div>
+            <p>Image Preview:</p>
+            {newImageUrl ? (
+              <img src={newImageUrl} alt="Preview" style={{ maxWidth: "100%" }} />
+            ) : (
+              <p>No image selected</p>
+            )}
+          </div> */}
 
           <input
             type="file"
@@ -119,22 +130,44 @@ const AddLogForm = ({ setBlogPost }) => {
           <div className="mt-2">
             <Button
               className="btn btn-primary ms-2 m-1"
-              onClick={()=>{
+              onClick={() => {
                 handleAddImage();
-                handleSendOTP()
+                handleSendOTP();
               }}
             >
               Save
             </Button>
             <Button
               className="btn btn-secondary me-2"
-              onClick={() => onCancelLog()}
+              onClick={onCancelLog}
             >
               Cancel
             </Button>
+            <Button
+              className="btn btn-info"
+              onClick={togglePreview}
+            >
+              {showPreview ? "Hide Preview" : "Show Preview"}
+            </Button>
           </div>
+
+          {/* Preview Section */}
+          {showPreview && (
+            <div className="mt-3">
+              <h6>Preview:</h6>
+              <hr/>
+              <div className="">
+                <h3 >{newImageTitle}</h3>
+                <p>{newImageDescription}</p>
+                {newImageUrl && (
+                  <img src={newImageUrl} alt="Preview" style={{ maxWidth: "100%" }} />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

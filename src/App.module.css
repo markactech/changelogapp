@@ -30,10 +30,22 @@
   /* margin-bottom: px; */
  position: relative;
 top: 46px;
-  
+background-color: red;
+  box-shadow: hsl(0, 0%, 0%) 4px 4px 0px;
+  border-radius: 8px;
+  padding: 13px 20px;
+  color: beige;
+  border:none;
+  transition: transform 200ms, box-shadow 200ms;
+
+}
+.addbutton:active{
+
+  transform: translateY(4px) translateX(4px);
+  box-shadow: #fcfeff 0 0 0 ;
 }
 .filterbutton{
-margin-left: 83%;
+margin-left: 69%;
 margin-top: 10px;
 
 
@@ -82,8 +94,8 @@ color: hsla(0, 0%, 100%, 0.754) !important;
 }
 
 .filterdropdown{
-  width: 150%;
-  height: 200px;
+  width: 160%;
+  /* height: 200px; */
   /* margin: 10px; */
-  padding: 10%;
+  /* padding: 10px; */
 }

@@ -8,6 +8,7 @@ import { IoSearch, IoChevronDownOutline } from "react-icons/io5"; // Import the 
 import Button from "react-bootstrap/Button";
 import styles from "./App.module.css";
 import { Dropdown } from "react-bootstrap";
+import axios from "axios";
 
 
 export default function SearchInput() {
@@ -16,7 +17,18 @@ export default function SearchInput() {
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  const handleSearch = () => {
+    // Send a GET request to the backend to search for posts
+    axios.get(`http://localhost:8080/posts/search?searchTerm=${searchTerm}`)
+      .then((response) => {
+        console.log(response.data);
+        // Handle the retrieved posts
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle errors
+      });
+  };
   return (
     <div>
       <Container>
@@ -38,6 +50,7 @@ export default function SearchInput() {
               style={{ position: "relative", right: "95%" , top:"10px" }}
               className=""
             /> */}
+             <button onClick={handleSearch}>Search</button>
             </div>
           </Col>
           <Col>
@@ -51,7 +64,7 @@ export default function SearchInput() {
               </Dropdown.Toggle>
 
               <Dropdown.Menu className={styles.filterdropdown}>
-                <p>Filter</p>
+                <p style={{marginLeft:"15px"}}>Filter</p>
                 {/* Add Dropdown.Item components for each filter option */}
                 <hr />
                 <Dropdown.Item>New</Dropdown.Item>

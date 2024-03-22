@@ -48,11 +48,10 @@ function ViewForm() {
       console.error("Error deleting post:", error);
     }
   };
-  const baseURL = 'http://localhost:8080'; // Update this with your actual backend URL
+  const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
 
-   
   // Construct the full URL
-  const i
+
   return (
     <>
       <SearchInput />
@@ -73,7 +72,7 @@ function ViewForm() {
                 </Badge>
               </div>{" "}
               {/* Display current date */}
-              <div className="d-flex justify-content-between align-items-center mb-1">
+              <div className="mt-6">
                 <h3>{post.title}</h3>
                 <span
                   className={styles.deteleicon}
@@ -102,6 +101,7 @@ function ViewForm() {
             </Button> */}
               </div>
               <div>
+                {console.log("post", post)}
                 {showFullDescription[post.id] ? (
                   <p>{post.description}</p>
                 ) : (
@@ -109,7 +109,7 @@ function ViewForm() {
                 )}
                 {showFullDescription[post.id] && (
                   <img
-                    src={post.imageUrl}
+                    src={`${baseURL}/${post?.media.replace(/\\/g, '/')}`}
                     alt="Preview"
                     className={styles.image}
                   />
