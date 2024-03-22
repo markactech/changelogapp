@@ -1,4 +1,4 @@
-.fullbody{
+.fullbody {
   margin-left: 15%;
   padding: 5%;
   width: 70%;
@@ -6,54 +6,37 @@
   font-family: Inter, sans-serif;
 }
 
-.icon{
+.icon {
   margin: 5px;
   /* background-color: aquamarine; */
 }
-.plusebutton{
+.plusebutton {
   margin-left: 87%;
-  color: rgb(184, 175, 175) ;
+  color: rgb(184, 175, 175);
   position: relative;
-  bottom: 48px;
+  bottom: 79px;
+  width: 10px;
+  height: 30px;
 }
-.searchinput{
-  width: 135% ;
+.searchinput {
+  width: 135%;
   border-radius: 5px;
   height: 35px;
   margin-bottom: 100px;
-  
-  
 }
-.addbutton{
-  
-  margin-left: 93%;
-  /* margin-bottom: px; */
- position: relative;
-top: 46px;
-background-color: red;
-  box-shadow: hsl(0, 0%, 0%) 4px 4px 0px;
-  border-radius: 8px;
-  padding: 13px 20px;
-  color: beige;
-  border:none;
-  transition: transform 200ms, box-shadow 200ms;
-
+.addbutton {
+  margin-left: 80%;
+  width: 120px;
+  position: relative;
+  top: 46px;
 }
-.addbutton:active{
-
-  transform: translateY(4px) translateX(4px);
-  box-shadow: #fcfeff 0 0 0 ;
+.filterbutton {
+  margin-left: 69%;
+  margin-top: 10px;
 }
-.filterbutton{
-margin-left: 69%;
-margin-top: 10px;
-
-
-}
-.image{
- width: 50%;
- height: auto;
-
+.image {
+  width: 90%;
+  height: 400px;
 }
 
 /* .cardbody{
@@ -67,35 +50,46 @@ margin-top: 10px;
   margin-left: 10%;
 } */
 
-.date{
+.date {
   position: relative;
   right: 25%;
   /* font-weight: bold; */
 }
 
-.new{
-position: relative;
-bottom: 40px;
-border: none; 
-background-color: #00ffbb !important;
-color: hsla(0, 0%, 100%, 0.754) !important;
+.new {
+  position: relative;
+  bottom: 40px;
+  border: none;
+
 }
-.deteleicon{
- position: relative;
- left: 85%;
- position: relative;
-  bottom: 45px;
+.deteleicon {
+  position: relative;
+  left: 1%;
+  top: 240px;
+  
   color: red;
 }
 
-.dateandnew{
+.dateandnew {
   position: relative;
   top: 25px;
 }
 
-.filterdropdown{
+.filterdropdown {
   width: 160%;
   /* height: 200px; */
   /* margin: 10px; */
   /* padding: 10px; */
+}
+
+.descrip{
+  position: relative;
+  bottom:  20px;
+  width: 85%;
+}
+.editicon{
+  position: relative;
+  left: 3%;
+  top: 240px;
+  
 }

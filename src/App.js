@@ -7,7 +7,7 @@ import form from './AddLogForm'
 import AddLogForm from "./AddLogForm";
 import Layout from "./component/Layout";
 import Header from "./Header";
-
+ 
 function App() {
   
   return (
@@ -17,6 +17,8 @@ function App() {
         <Route path="/" exact  element={<ViewForm/>}/>
         <Route path="/addlogs" exact  element={<AddLogForm/>}/>
         <Route path="/preview/id" exact  element={<AddLogForm/>}/>
+        <Route path="/editlog/:id" exact  element={<AddLogForm/>}/>
+        
         </Route>
        
       </Routes>

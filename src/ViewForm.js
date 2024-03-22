@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
-import { BsPlus, BsDash } from "react-icons/bs"; // Import icons from React Icons library
+import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
 import { MdDelete } from "react-icons/md";
 import Badge from "react-bootstrap/Badge";
 import moment from "moment";
 import SearchInput from "./SearchInput";
+import { HiPencilAlt } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 
 function ViewForm() {
   const [posts, setPosts] = useState([]);
   const [showFullDescription, setShowFullDescription] = useState({});
+  const navigate = useNavigate();
 
   const toggleDescription = (postId) => {
     setShowFullDescription({
@@ -50,11 +54,14 @@ function ViewForm() {
   };
   const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
 
-  // Construct the full URL
+  const handleEdit = (id) => {
+    navigate(`/editlog/${id}`);
+  };
 
   return (
     <>
-      <SearchInput />
+      <Header/>
+      <SearchInput setPosts={setPosts} />
       <div className="container ">
         <hr />
 
@@ -74,12 +81,7 @@ function ViewForm() {
               {/* Display current date */}
               <div className="mt-6">
                 <h3>{post.title}</h3>
-                <span
-                  className={styles.deteleicon}
-                  onClick={() => handleDelete(post.id)}
-                >
-                  <MdDelete />
-                </span>
+
                 <Button
                   variant="outline-light"
                   className={styles.plusebutton}
@@ -89,7 +91,17 @@ function ViewForm() {
                   }}
                   onClick={() => toggleDescription(post.id)}
                 >
-                  {showFullDescription[post.id] ? <BsDash /> : <BsPlus />}{" "}
+                  {showFullDescription[post.id] ? (
+                    <BsDash
+                      className="mb-2"
+                      style={{ position: "relative", right: "8px" }}
+                    />
+                  ) : (
+                    <BsPlus
+                      className="mb-2  "
+                      style={{ position: "relative", right: "8px",bottom:"2px"}}
+                    />
+                  )}{" "}
                   {/* Use icons */}
                 </Button>
                 {/* <Button
@@ -101,23 +113,37 @@ function ViewForm() {
             </Button> */}
               </div>
               <div>
-                {console.log("post", post)}
-                {showFullDescription[post.id] ? (
-                  <p>{post.description}</p>
-                ) : (
-                  <p>{post.description.substring(0, 100)}</p>
-                )}
-                {showFullDescription[post.id] && (
-                  <img
-                    src={`${baseURL}/${post?.media.replace(/\\/g, '/')}`}
-                    alt="Preview"
-                    className={styles.image}
-                  />
-                )}
-
+                <div className={styles.descrip}>
+                  {console.log("post", post)}
+                  {showFullDescription[post.id] ? (
+                    <p>{post.description}</p>
+                  ) : (
+                    <p>{post.description.substring(0, 200)}</p>
+                  )}
+                  {showFullDescription[post.id] && (
+                    <>
+                      <img
+                        src={`${baseURL}/${post?.media.replace(/\\/g, "/")}`}
+                        alt="Preview"
+                        className={styles.image}
+                      />
+                      <span
+                        className={styles.deteleicon}
+                        onClick={() => handleDelete(post.id)}
+                      >
+                        <BsTrash2 />
+                      </span>
+                      <span className={styles.editicon}
+                      onClick={()=>handleEdit(post.id)}>
+                        <HiPencilAlt />
+                      </span>
+                    </>
+                  )}
+                </div>
                 {/* Conditionally render the image */}
               </div>
             </div>
+
             <hr className=" mt-5" style={{ width: "100%" }} />
           </>
         ))}

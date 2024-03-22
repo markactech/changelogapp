@@ -11,10 +11,7 @@ function Header() {
         <Row>
           <h1>Changelog</h1>
           <p>
-            Follow up on the latest improvements and updates. |{" "}
-            <span className={StyleSheet.icon}>
-              <CiWifiOn />
-            </span>
+            Follow up on the latest improvements and updates.
             RSS{" "}
           </p>
         </Row>
