@@ -13,7 +13,7 @@ export default function SearchInput({ setPosts }) {
   const handleChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    if (value.length >= 4 || value.length==0) {
+    if (value.length >= 4 || value.length == 0) {
       handleSearch(value);
     } else {
       setPosts([]);
@@ -23,7 +23,7 @@ export default function SearchInput({ setPosts }) {
   const handleSearch = (term) => {
     // Send a GET request to the backend to search for posts
     axios
-      .get(`http://localhost:8080/search?searchTerm=${term}`)
+      .get(`${process.env.REACT_API_URL}/search?searchTerm=${term}`)
       .then((response) => {
         if (response.data) {
           setPosts(response.data);

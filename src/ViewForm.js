@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import Button from "react-bootstrap/Button";
-import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
+import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs";
 import styles from "./App.module.css";
 import { MdDelete } from "react-icons/md";
 import Badge from "react-bootstrap/Badge";
@@ -24,7 +24,6 @@ function ViewForm() {
     });
   };
 
-  
   const getCurrentDate = () => {
     const currentDate = moment();
     const formattedDate = currentDate.format("MMMM DD, YYYY");
@@ -34,7 +33,7 @@ function ViewForm() {
   useEffect(() => {
     console.log("Fetching posts...");
     axios
-      .get("http://localhost:8080/posts")
+      .get(`${process.env.REACT_API_URL}/posts`)
       .then((response) => {
         console.log("Posts:", response.data);
         setPosts(response.data);
@@ -46,14 +45,13 @@ function ViewForm() {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:8080/posts/${postId}`);
-      // Update posts state by removing the deleted post
+      await axios.delete(`${process.env.REACT_API_URL}/posts/${postId}`);
       setPosts(posts.filter((post) => post.id !== postId));
     } catch (error) {
       console.error("Error deleting post:", error);
     }
   };
-  const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
+  const baseURL = `${process.env.REACT_API_URL}`;
 
   const handleEdit = (id) => {
     navigate(`/editlog/${id}`);
@@ -61,7 +59,7 @@ function ViewForm() {
 
   return (
     <>
-      <Header/>
+      <Header />
       <SearchInput setPosts={setPosts} />
       <div className="container mb-5">
         <hr />
@@ -79,7 +77,6 @@ function ViewForm() {
                   New
                 </Badge>
               </div>{" "}
-              {/* Display current date */}
               <div className="mt-6">
                 <h3>{post.title}</h3>
 
@@ -100,7 +97,11 @@ function ViewForm() {
                   ) : (
                     <BsPlus
                       className="mb-2  "
-                      style={{ position: "relative", right: "8px",bottom:"2px"}}
+                      style={{
+                        position: "relative",
+                        right: "8px",
+                        bottom: "2px",
+                      }}
                     />
                   )}{" "}
                   {/* Use icons */}
@@ -134,8 +135,10 @@ function ViewForm() {
                       >
                         <BsTrash2 />
                       </span>
-                      <span className={styles.editicon}
-                      onClick={()=>handleEdit(post.id)}>
+                      <span
+                        className={styles.editicon}
+                        onClick={() => handleEdit(post.id)}
+                      >
                         <HiPencilAlt />
                       </span>
                     </>
@@ -149,7 +152,7 @@ function ViewForm() {
           </>
         ))}
       </div>
-      <Footer/> 
+      <Footer />
     </>
   );
 }

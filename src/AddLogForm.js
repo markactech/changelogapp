@@ -5,7 +5,7 @@ import axios from "axios"; // Import Axios library
 import { Spinner, Toast } from "react-bootstrap";
 import styles from "./App.module.css";
 
-const AddLogForm = ({ setBlogPost }) => {
+const AddLogForm = ({ sendData, updatePreviewData }) => {
   const { id } = useParams();
   const [newImageTitle, setNewImageTitle] = useState("");
   const [newImageDescription, setNewImageDescription] = useState("");
@@ -18,7 +18,7 @@ const AddLogForm = ({ setBlogPost }) => {
   const [loading, setLoading] = useState(false); // State for spinner
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
   const [showToast, setShowToast] = useState(false); // State for showing toast
- console.log( "tost",showToast)
+  console.log("tost", showToast);
   const handleSubmit = async () => {
     if (
       newImageTitle.trim() !== "" &&
@@ -27,6 +27,8 @@ const AddLogForm = ({ setBlogPost }) => {
       newImageFile
     ) {
       setLoading(true); // Show spinner
+
+      sendData(newImageUrl, newImageDescription, newImageTitle);
 
       try {
         const formData = new FormData();
@@ -39,7 +41,7 @@ const AddLogForm = ({ setBlogPost }) => {
         let response;
         if (id) {
           response = await axios.put(
-            `http://localhost:8080/posts/${id}`,
+            `${process.env.REACT_API_URL}/posts/${id}`,
             formData,
             {
               headers: {
@@ -48,11 +50,15 @@ const AddLogForm = ({ setBlogPost }) => {
             }
           );
         } else {
-          response = await axios.post("http://localhost:8080/posts", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
+          response = await axios.post(
+            `${process.env.REACT_API_URL}/posts`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
         }
 
         const newPost = response.data;
@@ -66,6 +72,7 @@ const AddLogForm = ({ setBlogPost }) => {
         // Show success toast
         setShowToast(true);
         setToastMessage("Post saved successfully");
+        updatePreviewData(newImageUrl, newImageDescription, newImageTitle);
       } catch (error) {
         console.error("Error adding post:", error.message);
         // Show error toast
@@ -78,19 +85,21 @@ const AddLogForm = ({ setBlogPost }) => {
   };
   const handleSendmail = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/send-otp", {
-        email,
-        title:newImageTitle ,
-        description: newImageDescription,
-        img:newImageFile
-      });
+      const response = await axios.post(
+        `${process.env.REACT_API_URL}/send-otp`,
+        {
+          email,
+          title: newImageTitle,
+          description: newImageDescription,
+          img: newImageFile,
+        }
+      );
       console.log(response.data.message); // Log success message
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
-  
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setNewImageFile(file);
@@ -103,7 +112,21 @@ const AddLogForm = ({ setBlogPost }) => {
   const togglePreview = () => {
     setShowPreview(!showPreview);
   };
-console.log("img",setNewImageUrl)
+  console.log("img", setNewImageUrl);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "title") {
+      setNewImageTitle(value);
+    } else if (name === "description") {
+      setNewImageDescription(value);
+    } else if (name === "imageUrl") {
+      setNewImageUrl(value);
+    }
+
+    updatePreviewData(newImageUrl, newImageDescription, newImageTitle);
+  };
+
   return (
     <div className="container mt-5">
       <div className="card w-50" style={{ marginLeft: "17rem" }}>
@@ -164,7 +187,11 @@ console.log("img",setNewImageUrl)
                   "Save"
                 )}
               </Button>
-              <Button variant="secondary" className="me-2" onClick={onCancelLog}>
+              <Button
+                variant="secondary"
+                className="me-2"
+                onClick={onCancelLog}
+              >
                 Cancel
               </Button>
               <Button variant="info" onClick={togglePreview}>
@@ -190,7 +217,9 @@ console.log("img",setNewImageUrl)
           <Toast
             show={showToast}
             onClose={() => setShowToast(false)}
-            className={toastMessage.includes("Failed") ? "bg-danger" : "bg-success"}
+            className={
+              toastMessage.includes("Failed") ? "bg-danger" : "bg-success"
+            }
             // delay={3000}
             autohide
             style={{ position: "absolute", bottom: "1rem", right: "1rem" }}

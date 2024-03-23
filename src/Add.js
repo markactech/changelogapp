@@ -9,7 +9,7 @@ function Add() {
   const navigate = useNavigate();
 
   const navigateToAnotherComponent = () => {
-    navigate("/addlogs");
+    navigate("/tabs");
   };
 
   return (
@@ -20,7 +20,7 @@ function Add() {
           className={styles.addbutton}
           onClick={navigateToAnotherComponent}
         >
-         <IoAddCircleSharp className="me-2 mb-1"/> Add logs
+          <IoAddCircleSharp className="me-2 mb-1" /> Add logs
         </Button>
       </Container>
     </div>
