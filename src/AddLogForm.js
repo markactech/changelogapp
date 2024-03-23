@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios"; // Import Axios library
+import { Spinner, Toast } from "react-bootstrap";
 import styles from "./App.module.css";
 
 const AddLogForm = ({ setBlogPost }) => {
@@ -14,7 +15,10 @@ const AddLogForm = ({ setBlogPost }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [showPreview, setShowPreview] = useState(false);
-
+  const [loading, setLoading] = useState(false); // State for spinner
+  const [toastMessage, setToastMessage] = useState(""); // State for toast message
+  const [showToast, setShowToast] = useState(false); // State for showing toast
+ console.log( "tost",showToast)
   const handleSubmit = async () => {
     if (
       newImageTitle.trim() !== "" &&
@@ -22,6 +26,8 @@ const AddLogForm = ({ setBlogPost }) => {
       email.trim() !== "" &&
       newImageFile
     ) {
+      setLoading(true); // Show spinner
+
       try {
         const formData = new FormData();
         formData.append("title", newImageTitle);
@@ -56,23 +62,35 @@ const AddLogForm = ({ setBlogPost }) => {
         setNewImageDescription("");
         setNewImageFile(null);
         navigate("/");
+
+        // Show success toast
+        setShowToast(true);
+        setToastMessage("Post saved successfully");
       } catch (error) {
         console.error("Error adding post:", error.message);
+        // Show error toast
+        setShowToast(true);
+        setToastMessage("Failed to save post");
+      } finally {
+        setLoading(false); // Hide spinner
       }
     }
   };
-
-  const handleSendOTP = async () => {
+  const handleSendmail = async () => {
     try {
       const response = await axios.post("http://localhost:8080/send-otp", {
         email,
+        title:newImageTitle ,
+        description: newImageDescription,
+        img:newImageFile
       });
       console.log(response.data.message); // Log success message
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
-
+  
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setNewImageFile(file);
@@ -85,10 +103,10 @@ const AddLogForm = ({ setBlogPost }) => {
   const togglePreview = () => {
     setShowPreview(!showPreview);
   };
-
+console.log("img",setNewImageUrl)
   return (
-    <div className="container mt-5" >
-      <div className="card w-50" style={{marginLeft:"17rem"}}>
+    <div className="container mt-5">
+      <div className="card w-50" style={{ marginLeft: "17rem" }}>
         <div className="card-body">
           <h5 className="card-title">Add New ChangeLog</h5>
           <form style={{ width: "26rem" }} className="form-outline">
@@ -114,7 +132,7 @@ const AddLogForm = ({ setBlogPost }) => {
               value={newImageDescription}
               onChange={(e) => setNewImageDescription(e.target.value)}
             />
-    <select
+            <select
               className="form-select mb-3 ms-5"
               value={logType}
               onChange={(e) => setLogType(e.target.value)}
@@ -130,19 +148,21 @@ const AddLogForm = ({ setBlogPost }) => {
               onChange={handleImageChange}
             />
 
-     
-        
-
             <div className="mt-3">
               <Button
                 variant="primary"
                 className="me-2 ms-5"
                 onClick={() => {
                   handleSubmit();
-                  handleSendOTP();
+                  handleSendmail();
                 }}
+                disabled={loading} // Disable button when loading
               >
-                Save
+                {loading ? (
+                  <Spinner animation="border" size="sm" /> // Show spinner when loading
+                ) : (
+                  "Save"
+                )}
               </Button>
               <Button variant="secondary" className="me-2" onClick={onCancelLog}>
                 Cancel
@@ -165,6 +185,18 @@ const AddLogForm = ({ setBlogPost }) => {
               </div>
             </div>
           )}
+
+          {/* Toast component for displaying success or error message */}
+          <Toast
+            show={showToast}
+            onClose={() => setShowToast(false)}
+            className={toastMessage.includes("Failed") ? "bg-danger" : "bg-success"}
+            // delay={3000}
+            autohide
+            style={{ position: "absolute", bottom: "1rem", right: "1rem" }}
+          >
+            <Toast.Body>{toastMessage}</Toast.Body>
+          </Toast>
         </div>
       </div>
     </div>

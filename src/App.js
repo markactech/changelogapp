@@ -7,6 +7,7 @@ import form from './AddLogForm'
 import AddLogForm from "./AddLogForm";
 import Layout from "./component/Layout";
 import Header from "./Header";
+import Footer from "./component/Footer ";
  
 function App() {
   

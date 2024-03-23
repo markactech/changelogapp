@@ -45,6 +45,7 @@ function MainApp() {
       <Header />
       <SearchInput />
       <ViewForm blogpost={blogpost}  onRemove={handleRemovePost}/>
+      
     </div>
   );
 }

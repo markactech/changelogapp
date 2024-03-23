@@ -10,6 +10,7 @@ import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import Footer from "./component/Footer ";
 
 function ViewForm() {
   const [posts, setPosts] = useState([]);
@@ -23,7 +24,7 @@ function ViewForm() {
     });
   };
 
-  console.log("Calklkingingingingn");
+  
   const getCurrentDate = () => {
     const currentDate = moment();
     const formattedDate = currentDate.format("MMMM DD, YYYY");
@@ -62,7 +63,7 @@ function ViewForm() {
     <>
       <Header/>
       <SearchInput setPosts={setPosts} />
-      <div className="container ">
+      <div className="container mb-5">
         <hr />
 
         {posts.map((post) => (
@@ -148,6 +149,7 @@ function ViewForm() {
           </>
         ))}
       </div>
+      <Footer/> 
     </>
   );
 }
