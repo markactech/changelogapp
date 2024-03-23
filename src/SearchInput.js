@@ -7,10 +7,13 @@ import styles from "./App.module.css";
 import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 
-export default function SearchInput({ setPosts }) {
+export default function SearchInput({ setPosts , setFilter }) {
   const [searchTerm, setSearchTerm] = useState("");
-
-  const handleChange = (event) => {
+ 
+  const handleFilterChange = (eventKey) => {
+     setFilter(eventKey)
+   };
+   const handleChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
     if (value.length >= 4 || value.length==0) {
@@ -56,24 +59,32 @@ export default function SearchInput({ setPosts }) {
             </div>
           </Col>
           <Col>
-            <Dropdown className={styles.filterbutton}>
-              <Dropdown.Toggle
-                variant="outline-light"
-                style={{ color: "black", border: "1px solid #EEF0F2" }}
-              >
-                <CiFilter style={{ marginBottom: "10px", margin: "5px" }} />
-                Filters
-              </Dropdown.Toggle>
+          <Dropdown className={styles.filterbutton} onSelect={handleFilterChange}>
+      <Dropdown.Toggle
+        variant="outline-light"
+        style={{ color: "black", border: "1px solid #EEF0F2" }}
+      >
+        <CiFilter style={{ marginBottom: "10px", margin: "5px" }} />
+        Filters
+      </Dropdown.Toggle>
 
-              <Dropdown.Menu className={styles.filterdropdown}>
-                <p style={{ marginLeft: "15px" }}>Filter</p>
-                <hr />
-                <Dropdown.Item>New</Dropdown.Item>
-                <Dropdown.Item>All entries</Dropdown.Item>
-                <Dropdown.Item>Improved</Dropdown.Item>
-                <Dropdown.Item>Fixed</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <Dropdown.Menu className={styles.filterdropdown}>
+        <p style={{ marginLeft: "15px" }}>Filter</p>
+        <hr />
+        <Dropdown.Item eventKey="New"  >
+          New
+        </Dropdown.Item>
+        <Dropdown.Item eventKey="all"  >
+          All entries
+        </Dropdown.Item>
+        <Dropdown.Item eventKey="Improved"  >
+          Improved
+        </Dropdown.Item>
+        <Dropdown.Item eventKey="Fixed "  >
+          Fixed
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
           </Col>
         </Row>
       </Container>

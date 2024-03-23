@@ -1,10 +1,7 @@
 import React from "react";
-import { CiWifiOn } from "react-icons/ci";
-import Container from "react-bootstrap/Container";
+ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import styles from "./App.module.css";
-function Header() {
+  function Header() {
   return (
     <header>
       <Container className="me-3 mt-4">
@@ -12,7 +9,7 @@ function Header() {
           <h1>Changelog</h1>
           <p>
             Follow up on the latest improvements and updates.
-            RSS{" "}
+            
           </p>
         </Row>
       </Container>

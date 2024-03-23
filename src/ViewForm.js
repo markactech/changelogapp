@@ -3,8 +3,7 @@ import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
 import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
-import { MdDelete } from "react-icons/md";
-import Badge from "react-bootstrap/Badge";
+ import Badge from "react-bootstrap/Badge";
 import moment from "moment";
 import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
@@ -13,8 +12,9 @@ import Header from "./Header";
 import Footer from "./component/Footer ";
 
 function ViewForm() {
+  const [allpost,setAllpost] = useState([])
   const [posts, setPosts] = useState([]);
-  const [showFullDescription, setShowFullDescription] = useState({});
+   const [showFullDescription, setShowFullDescription] = useState({});
   const navigate = useNavigate();
 
   const toggleDescription = (postId) => {
@@ -24,12 +24,8 @@ function ViewForm() {
     });
   };
 
-  
-  const getCurrentDate = () => {
-    const currentDate = moment();
-    const formattedDate = currentDate.format("MMMM DD, YYYY");
-    return formattedDate;
-  };
+
+ 
 
   useEffect(() => {
     console.log("Fetching posts...");
@@ -38,6 +34,7 @@ function ViewForm() {
       .then((response) => {
         console.log("Posts:", response.data);
         setPosts(response.data);
+        setAllpost(response.data)
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
@@ -49,6 +46,7 @@ function ViewForm() {
       await axios.delete(`http://localhost:8080/posts/${postId}`);
       // Update posts state by removing the deleted post
       setPosts(posts.filter((post) => post.id !== postId));
+      setAllpost(posts.filter((post) => post.id !== postId))
     } catch (error) {
       console.error("Error deleting post:", error);
     }
@@ -58,15 +56,26 @@ function ViewForm() {
   const handleEdit = (id) => {
     navigate(`/editlog/${id}`);
   };
-
+  const setFilter=(e)=>{
+   const filterpost =  posts.filter(x=>{
+    if(e!=='all'){
+      return x.tag===e
+    }
+   else{
+    return x
+   }
+  })
+  setAllpost(filterpost)
+ 
+   }
   return (
     <>
       <Header/>
-      <SearchInput setPosts={setPosts} />
+      <SearchInput setPosts={setPosts} setFilter={setFilter}/>
       <div className="container mb-5">
         <hr />
 
-        {posts.map((post) => (
+        {allpost.map((post) => (
           <>
             <div
               key={post.id}
