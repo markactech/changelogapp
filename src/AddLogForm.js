@@ -12,6 +12,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
   const [newImageFile, setNewImageFile] = useState(null);
   const [logType, setLogType] = useState("New"); // State for log type
   const navigate = useNavigate();
+  const [imagepreview,setPreviewImageUrl] =useState(null)
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false); // State for spinner
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
@@ -105,15 +106,11 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
     else {
       const file = e.target.files[0];
       setNewImageFile(file);
-
-
-       if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setNewImageFile(reader.result);
-        };
-        reader.readAsDataURL(file);
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setPreviewImageUrl(imageUrl); // assuming you have a state variable to store the preview image URL
       }
+ 
   
 
     }
@@ -313,8 +310,8 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                 {newImageUrl && (
                   <img className="img-thumbnail w-100 mt-3 h-50" src={`${baseURL}/${newImageUrl.replace(/\\/g, "/")}`} alt="Selected Image" />
                 )}
-                {newImageFile && (
-                  <img className="img-thumbnail w-100 mt-3 h-50" src={newImageFile} alt="Selected Image" />
+                {imagepreview && (
+                  <img className="img-thumbnail w-100 mt-3 h-50" src={imagepreview} alt="Selected Image" />
                 )}
 
               </div>
