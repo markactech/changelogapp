@@ -17,8 +17,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
   const [loading, setLoading] = useState(false); // State for spinner
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
   const [showToast, setShowToast] = useState(false); // State for showing toast
-  console.log("tost", showToast);
-  const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
+   const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
 
   const [activeTab, setActiveTab] = useState('add');
 
@@ -26,8 +25,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
     setActiveTab(tab);
   };
 
-  console.log("logType", logType)
-  const handleSubmit = async () => {
+   const handleSubmit = async () => {
     if (
       newImageTitle.trim() !== "" &&
       newImageDescription.trim() !== "" &&
@@ -39,17 +37,22 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
       // sendData(newImageUrl, newImageDescription, newImageTitle);
 
       try {
-        const formData = new FormData();
-        formData.append("title", newImageTitle);
-        formData.append("description", newImageDescription);
-        formData.append("email", email);
-        formData.append("image", newImageFile);
-        formData.append("type", logType);
+       
         let response;
         if (id) {
+          
+
+          const formDatanew = new FormData();
+          formDatanew.append("title", newImageTitle);
+          formDatanew.append("description", newImageDescription);
+          formDatanew.append("email", email);
+          formDatanew.append("image", newImageFile);
+          formDatanew.append("type", logType);
+
+          console.log("formData",formDatanew)
           response = await axios.put(
             `${"http://localhost:8080"}/posts/${id}`,
-            formData,
+            formDatanew,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -57,11 +60,14 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
             }
           );
         } else {
-           formData.append("title", newImageTitle);
-        formData.append("description", newImageDescription);
-        formData.append("email", email);
-        formData.append("image", newImageFile);
-        formData.append("type", logType);
+          const formData = new FormData();
+          formData.append("title", newImageTitle);
+          formData.append("description", newImageDescription);
+          formData.append("email", email);
+          formData.append("image", newImageFile);
+          formData.append("type", logType);
+          console.log("formData",formData)
+
           response = await axios.post(
             `${"http://localhost:8080"}/posts`,
             formData,
@@ -81,40 +87,28 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
         setNewImageFile(null);
         navigate("/");
 
-        // Show success toast
-        setShowToast(true);
+         setShowToast(true);
         setToastMessage("Post saved successfully");
-        // updatePreviewData(newImageUrl, newImageDescription, newImageTitle);
-      } catch (error) {
+       } catch (error) {
         console.error("Error adding post:", error.message);
-        // Show error toast
-        setShowToast(true);
+         setShowToast(true);
         setToastMessage("Failed to save post");
       } finally {
-        setLoading(false); // Hide spinner
+        setLoading(false);  
       }
     }
   };
 
+ 
 
   const handleImageChange = (e) => {
-   
-      
-    if (newImageUrl) {
-      setNewImageFile(newImageUrl)
-    }
-    else {
+  
       const file = e.target.files[0];
       setNewImageFile(file);
       if (file) {
         const imageUrl = URL.createObjectURL(file);
         setPreviewImageUrl(imageUrl); // assuming you have a state variable to store the preview image URL
       }
- 
-  
-
-    }
-
   };
 
   const onCancelLog = () => {
@@ -122,8 +116,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
   };
 
 
-  console.log("img", setNewImageUrl);
-
+ 
   const getPostbyid = async () => {
     const postdata = await axios.get(
       `${"http://localhost:8080"}/posts/${id}`);
@@ -138,8 +131,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
     }
   }, [id]);
 
-  console.log("img", setNewImageUrl)
-  return (
+   return (
 
 
     <div className="container mt-3">
@@ -245,7 +237,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                       <img className="img-thumbnail" src={`${baseURL}/${newImageUrl.replace(/\\/g, "/")}`} alt="Selected Image" style={{ maxWidth: '100px', maxHeight: '100px' }} />
                     )}
                     <input
-                      type="file"
+                      type="file"  name="image"
                       className="form-control "
                       onChange={handleImageChange}
                     />
@@ -303,15 +295,15 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
               <div>
                 <h3 className="mt-2 d-inline-block"  >{newImageTitle} </h3>
                 
-                 <Badge className="mb-4" bg="primary" pill  >
+                 <Badge className="mb-4 ms-3" bg="primary" pill  >
                   {logType}
                 </Badge>
                 <p className="mt-2">{newImageDescription}</p>
                 {newImageUrl && (
-                  <img className="img-thumbnail w-100 mt-3 h-50" src={`${baseURL}/${newImageUrl.replace(/\\/g, "/")}`} alt="Selected Image" />
+                  <img className="img-thumbnail w-50 mt-3 h-50" src={`${baseURL}/${newImageUrl.replace(/\\/g, "/")}`} alt="Selected Image" />
                 )}
                 {imagepreview && (
-                  <img className="img-thumbnail w-100 mt-3 h-50" src={imagepreview} alt="Selected Image" />
+                  <img className="img-thumbnail w-50 mt-3 h-50" src={imagepreview} alt="Selected Image" />
                 )}
 
               </div>
