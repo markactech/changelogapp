@@ -11,6 +11,7 @@ import Title from "./Title";
 import AddLogForm from "../AddLogForm";
 
 function MainApp() {
+  const [showForm,setShowForm] =React.useState(false)
    const [blogpost, setBlogPost] = useState([]);
   const toggleForm = () => {
     setShowForm(true);

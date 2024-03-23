@@ -124,7 +124,7 @@ function ViewForm() {
                   {showFullDescription[post.id] && (
                     <>
                       <img
-                        src={`${baseURL}/${post?.media.replace(/\\/g, "/")}`}
+                        src={`${baseURL}/${post?.image.replace(/\\/g, "/")}`}
                         alt="Preview"
                         className={styles.image}
                       />
