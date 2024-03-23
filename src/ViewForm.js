@@ -11,9 +11,11 @@ import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./component/Footer ";
+import "./ViewForm.css";
 
 function ViewForm() {
   const [posts, setPosts] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("All entries");
   const [showFullDescription, setShowFullDescription] = useState({});
   const navigate = useNavigate();
 
@@ -24,7 +26,6 @@ function ViewForm() {
     });
   };
 
-  
   const getCurrentDate = () => {
     const currentDate = moment();
     const formattedDate = currentDate.format("MMMM DD, YYYY");
@@ -61,94 +62,135 @@ function ViewForm() {
 
   return (
     <>
-      <Header/>
-      <SearchInput setPosts={setPosts} />
+      <Header />
+      <SearchInput
+        setPosts={setPosts}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
       <div className="container mb-5">
         <hr />
 
-        {posts.map((post) => (
-          <>
-            <div
-              key={post.id}
-              className="mb-5 mt-1"
-              style={{ borderRadius: "8px", margin: "3%", marginLeft: "26%" }}
-            >
-              <div className={styles.dateandnew}>
-                <p className={styles.date}>{ moment(post.createdAt).format('MMMM D ,yyyy')}</p>{" "}
-                <Badge className={styles.new} pill style={{}}>
-                  {post.tag}
-                </Badge>
-              </div>{" "}
-              {/* Display current date */}
-              <div className="mt-6">
-                <h3>{post.title}</h3>
-
-                <Button
-                  variant="outline-light"
-                  className={styles.plusebutton}
+        {posts.length > 0 ? (
+          posts
+            .filter(
+              (post) =>
+                selectedFilter === "All entries" || post.tag === selectedFilter
+            )
+            .map((post) => (
+              <>
+                <div
+                  key={post.id}
+                  className="mb-5 mt-1"
                   style={{
-                    color: "black",
-                    border: "1px solid rgb(184, 175, 175)",
+                    borderRadius: "8px",
+                    margin: "3%",
+                    marginLeft: "26%",
                   }}
-                  onClick={() => toggleDescription(post.id)}
                 >
-                  {showFullDescription[post.id] ? (
-                    <BsDash
-                      className="mb-2"
-                      style={{ position: "relative", right: "8px" }}
-                    />
-                  ) : (
-                    <BsPlus
-                      className="mb-2  "
-                      style={{ position: "relative", right: "8px",bottom:"2px"}}
-                    />
-                  )}{" "}
-                  {/* Use icons */}
-                </Button>
-                {/* <Button
+                  <div className={styles.dateandnew}>
+                    <p className={styles.date}>
+                      {moment(post.createdAt).format("MMMM D ,yyyy")}
+                    </p>{" "}
+                    <div className={styles.new}>
+                      <span
+                        className={
+                          post.tag === "New"
+                            ? "badge green"
+                            : post.tag === "Improved"
+                            ? "badge blue"
+                            : "badge yellow"
+                        }
+                        style={{}}
+                      >
+                        {post.tag}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Display current date */}
+                  <div className="mt-6">
+                    <h3>{post.title}</h3>
+
+                    <Button
+                      variant="outline-light"
+                      className={styles.plusebutton}
+                      style={{
+                        color: "black",
+                        border: "1px solid rgb(184, 175, 175)",
+                      }}
+                      onClick={() => toggleDescription(post.id)}
+                    >
+                      {showFullDescription[post.id] ? (
+                        <BsDash
+                          className="mb-2"
+                          style={{ position: "relative", right: "8px" }}
+                        />
+                      ) : (
+                        <BsPlus
+                          className="mb-2  "
+                          style={{
+                            position: "relative",
+                            right: "8px",
+                            bottom: "2px",
+                          }}
+                        />
+                      )}{" "}
+                      {/* Use icons */}
+                    </Button>
+                    {/* <Button
               variant="danger"
               className={styles.deleteButton}
               onClick={() => handleDelete(post.id)}
             >
               <MdDelete />
             </Button> */}
-              </div>
-              <div>
-                <div className={styles.descrip}>
-                   {showFullDescription[post.id] ? (
-                    <p>{post.description}</p>
-                  ) : (
-                    <p>{post.description.substring(0, 200)}</p>
-                  )}
-                  {showFullDescription[post.id] && (
-                    <>
-                      <img
-                        src={`${baseURL}/${post?.image.replace(/\\/g, "/")}`}
-                        alt="Preview"
-                        className={styles.image}
-                      />
-                      <span
-                        className={styles.deteleicon}
-                        onClick={() => handleDelete(post.id)}
-                      >
-                        <BsTrash2 />
-                      </span>
-                      <span className={styles.editicon}
-                      onClick={()=>handleEdit(post.id)}>
-                        <HiPencilAlt />
-                      </span>
-                    </>
-                  )}
+                  </div>
+                  <div>
+                    <div className={styles.descrip}>
+                      {showFullDescription[post.id] ? (
+                        <p>{post.description}</p>
+                      ) : (
+                        <p>{post.description.substring(0, 200)}</p>
+                      )}
+                      {showFullDescription[post.id] && (
+                        <>
+                          <img
+                            src={`${baseURL}/${post?.image.replace(
+                              /\\/g,
+                              "/"
+                            )}`}
+                            alt="Preview"
+                            className={styles.image}
+                          />
+                          <span
+                            className={styles.deteleicon}
+                            onClick={() => handleDelete(post.id)}
+                          >
+                            <BsTrash2 />
+                          </span>
+                          <span
+                            className={styles.editicon}
+                            onClick={() => handleEdit(post.id)}
+                          >
+                            <HiPencilAlt />
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    {/* Conditionally render the image */}
+                  </div>
                 </div>
-                {/* Conditionally render the image */}
-              </div>
-            </div>
 
-            <hr className=" mt-5" style={{ width: "100%" }} />
-          </>
-        ))}
+                <hr className=" mt-5" style={{ width: "100%" }} />
+              </>
+            ))
+        ) : (
+          <div className="d-flex justify-content-center">
+            No data to display
+          </div>
+        )}
       </div>
-      <Footer/> 
+      <Footer />
     </>
   );
 }
