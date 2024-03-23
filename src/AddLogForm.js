@@ -18,7 +18,8 @@ const AddLogForm = ({ setBlogPost }) => {
   const [loading, setLoading] = useState(false); // State for spinner
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
   const [showToast, setShowToast] = useState(false); // State for showing toast
- console.log( "tost",showToast)
+  const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
+
   const handleSubmit = async () => {
     if (
       newImageTitle.trim() !== "" &&
@@ -76,24 +77,33 @@ const AddLogForm = ({ setBlogPost }) => {
       }
     }
   };
-  const handleSendmail = async () => {
-    try {
-      const response = await axios.post("http://localhost:8080/send-otp", {
-        email,
-        title:newImageTitle ,
-        description: newImageDescription,
-        img:newImageFile
-      });
-      console.log(response.data.message); // Log success message
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
-  
-  
+
+  const getpostbyyid = async () => {
+    const getpost = await axios.get(`http://localhost:8080/posts/${id}`);
+    console.log("setNewImageFile", getpost?.data)
+    setNewImageTitle(getpost?.data?.title)
+    setNewImageDescription(getpost?.data?.description)
+    setNewImageUrl(getpost?.data?.image)
+    setEmail(getpost?.data?.email)
+
+  }
+
+  console.log("newImageUrl", newImageUrl)
+  React.useEffect(() => {
+    getpostbyyid()
+  }, [id])
+
+
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setNewImageFile(file);
+    console.log("clalining")
+    if(newImageUrl){
+      setNewImageFile(newImageUrl)
+    }
+    else{
+      const file = e.target.files[0];
+      setNewImageFile(file);
+    }
+   
   };
 
   const onCancelLog = () => {
@@ -103,7 +113,7 @@ const AddLogForm = ({ setBlogPost }) => {
   const togglePreview = () => {
     setShowPreview(!showPreview);
   };
-console.log("img",setNewImageUrl)
+  console.log("img", setNewImageUrl)
   return (
     <div className="container mt-5">
       <div className="card w-50" style={{ marginLeft: "17rem" }}>
@@ -142,9 +152,14 @@ console.log("img",setNewImageUrl)
               <option value="Improved">Improved</option>
               <option value="Fixed">Fixed</option>
             </select>
+
+            {newImageUrl && (
+              <img className="img-thumbnail"  src={`${baseURL}/${newImageUrl.replace(/\\/g, "/")}`} alt="Selected Image" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+            )}
             <input
               type="file"
-              className="form-control-file mb-3 ms-5"
+
+              className="form-control mb-3 ms-5"
               onChange={handleImageChange}
             />
 
@@ -154,7 +169,7 @@ console.log("img",setNewImageUrl)
                 className="me-2 ms-5"
                 onClick={() => {
                   handleSubmit();
-                  handleSendmail();
+
                 }}
                 disabled={loading} // Disable button when loading
               >
