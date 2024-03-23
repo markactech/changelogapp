@@ -74,9 +74,9 @@ function ViewForm() {
               style={{ borderRadius: "8px", margin: "3%", marginLeft: "26%" }}
             >
               <div className={styles.dateandnew}>
-                <p className={styles.date}>{getCurrentDate()}</p>{" "}
+                <p className={styles.date}>{ moment(post.createdAt).format('MMMM D ,yyyy')}</p>{" "}
                 <Badge className={styles.new} pill style={{}}>
-                  New
+                  {post.tag}
                 </Badge>
               </div>{" "}
               {/* Display current date */}
@@ -115,8 +115,7 @@ function ViewForm() {
               </div>
               <div>
                 <div className={styles.descrip}>
-                  {console.log("post", post)}
-                  {showFullDescription[post.id] ? (
+                   {showFullDescription[post.id] ? (
                     <p>{post.description}</p>
                   ) : (
                     <p>{post.description.substring(0, 200)}</p>
