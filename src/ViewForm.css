@@ -8,3 +8,7 @@
   background-color: rgb(200, 123, 22) !important;
 }
 
+.large-checkbox {
+  transform: scale(1.5); 
+  margin-right: 5px; 
+}

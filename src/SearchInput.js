@@ -58,14 +58,14 @@ export default function SearchInput({
 
   return (
     <div>
-      <Container>
-        <Row className="justify-content-end ">
+      <Container className=" d-flex justify-content-end  mb-5">
+        <Row className="w-30">
           <Col className="mt-2">
             <div className="input-group">
               <input
                 type="text"
                 className="form-control"
-                style={{ width: "10px", position: "relative", left: "14%" }}
+                // style={{ width: "10px", position: "relative", left: "14%" }}
                 aria-label="Text input with radio button"
                 placeholder="Search Entries..."
                 value={NewseachTerm}
@@ -74,10 +74,14 @@ export default function SearchInput({
             </div>
           </Col>
           <Col>
-            <Dropdown className={styles.filterbutton}>
+            <Dropdown className={styles.filterbutto}>
               <Dropdown.Toggle
                 variant="outline-light"
-                style={{ color: "black", border: "1px solid #EEF0F2" }}
+                style={{
+                  color: "black",
+                  border: "1px solid #EEF0F2",
+                  marginTop: "5px",
+                }}
               >
                 <CiFilter style={{ marginBottom: "10px", margin: "5px" }} />
                 Filters

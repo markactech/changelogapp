@@ -3,21 +3,29 @@ import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
 import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
-import { CiSearch } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
 import moment from "moment";
 import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./component/Footer ";
+import CreatableSelect from "react-select/creatable";
 import "./ViewForm.css";
-import { IoSearch } from "react-icons/io5"
+import { CiSearch } from "react-icons/ci";
+
 function ViewForm() {
   const [posts, setPosts] = useState([]);
+  const [selectedPosts, setSelectedPosts] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All entries");
   const [showFullDescription, setShowFullDescription] = useState({});
-  const [NewseachTerm,setNewSearchTerm] =useState("")
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedMails, setSelectedMails] = useState([]);
+  const [allEmails, setAllEmails] = useState([]);
+  const [selectedEmails, setSelectedEmails] = useState([]);
+  const [showCreatableSelect, setShowCreatableSelect] = useState(false);
   const navigate = useNavigate();
+const [NewseachTerm,setNewSearchTerm] =useState("")
 
   const toggleDescription = (postId) => {
     setShowFullDescription({
@@ -25,14 +33,28 @@ function ViewForm() {
       [postId]: !showFullDescription[postId],
     });
   };
-
-  console.log("NewseachTerm *************" ,NewseachTerm)
-  const getCurrentDate = () => {
+  useEffect(() => {
+    // Fetch posts and emails on component mount
+    
+    getAllEmails(); // Fetch all emails
+  }, []);
+   const getCurrentDate = () => {
     const currentDate = moment();
     const formattedDate = currentDate.format("MMMM DD, YYYY");
     return formattedDate;
   };
-
+  const getAllEmails = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/emaillist");
+      setAllEmails(response.data);
+    } catch (error) {
+      console.error("Error fetching emails:", error);
+    }
+  };
+  const setPasstoparent=(data)=>{
+    console.log("setPasstoparent",data);
+    setNewSearchTerm(data)
+  }
   useEffect(() => {
     console.log("Fetching posts...");
     axios
@@ -40,6 +62,12 @@ function ViewForm() {
       .then((response) => {
         console.log("Posts:", response.data);
         setPosts(response.data);
+        getAllEmails();
+        const initialShowDescriptionState = {};
+        response.data.forEach((post) => {
+          initialShowDescriptionState[post.id] = true;
+        });
+        setShowFullDescription(initialShowDescriptionState);
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
@@ -61,146 +89,222 @@ function ViewForm() {
     navigate(`/editlog/${id}`);
   };
 
-  const setPasstoparent=(data)=>{
-    console.log("setPasstoparent",data);
-    setNewSearchTerm(data)
-  }
+  const handleCheckboxChange = (postId) => {
+    setSelectedPosts((prevSelectedPosts) => {
+      if (prevSelectedPosts.includes(postId)) {
+        return prevSelectedPosts.filter((id) => id !== postId);
+      } else {
+        return [...prevSelectedPosts, postId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedPosts([]);
+    } else {
+      const allPostIds = posts.map((post) => post.id);
+      setSelectedPosts(allPostIds);
+    }
+    setSelectAll(!selectAll);
+  };
+
+  const handleCreatableSelectChange = (newValue) => {
+    setSelectedEmails(newValue);
+    console.log("Selected mails:", newValue);
+    console.log("selected Posts", selectedPosts);
+  };
+  const options = allEmails.map((email) => ({
+    value: email.id,
+    label: email.email
+  }));
+
+  
+ 
   return (
     <>
-      <Header />
+     <Header />
       <SearchInput
         setPosts={setPosts}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         setPasstoparent={setPasstoparent}
-        
       />
       <div className="container mb-5">
+        <div className="mb-3 d-flex justify-content-between align-items-center">
+          <input
+            type="checkbox"
+            checked={selectAll}
+            onChange={handleSelectAll}
+            className="large-checkbox"
+            
+          />
+          <label style={{position:"relative",right:"93%"}} className="mb-0">Select All</label>
+        </div>
+
         <hr />
-
-        {posts.length > 0 ? (
-          posts
-            .filter(
-              (post) =>
-                selectedFilter === "All entries" || post.tag === selectedFilter
-            )
-            .map((post) => (
-              <>
-                <div
-                  key={post.id}
-                  className="mb-5 mt-1"
-                  style={{
-                    borderRadius: "8px",
-                    margin: "3%",
-                    marginLeft: "26%",
-                  }}
-                >
-                  <div className={styles.dateandnew}>
-                    <p className={styles.date}>
-                      {moment(post.createdAt).format("MMMM D ,yyyy")}
-                    </p>{" "}
-                    <div className={styles.new}>
-                      <span
-                        className={
-                          post.tag === "New"
-                            ? "badge green"
-                            : post.tag === "Improved"
-                            ? "badge blue"
-                            : "badge yellow"
-                        }
-                        style={{}}
-                      >
-                        {post.tag}
-                      </span>
-                    </div>
-                  </div>
-                  {/* Display current date */}
-                  <div className="mt-6">
-                    <h3>{post.title}</h3>
-
-                    <Button
-                      variant="outline-light"
-                      className={styles.plusebutton}
-                      style={{
-                        color: "black",
-                        border: "1px solid rgb(184, 175, 175)",
-                      }}
-                      onClick={() => toggleDescription(post.id)}
-                    >
-                      {showFullDescription[post.id] ? (
-                        <BsDash
-                          className="mb-2"
-                          style={{ position: "relative", right: "8px" }}
-                        />
-                      ) : (
-                        <BsPlus
-                          className="mb-2  "
-                          style={{
-                            position: "relative",
-                            right: "8px",
-                            bottom: "2px",
-                          }}
-                        />
-                      )}{" "}
-                      {/* Use icons */}
-                    </Button>
-                    {/* <Button
-              variant="danger"
-              className={styles.deleteButton}
-              onClick={() => handleDelete(post.id)}
-            >
-              <MdDelete />
-            </Button> */}
-                  </div>
-                  <div>
-                    <div className={styles.descrip}>
-                      {showFullDescription[post.id] ? (
-                        <p>{post.description}</p>
-                      ) : (
-                        <p>{post.description.substring(0, 200)}</p>
-                      )}
-                      {showFullDescription[post.id] && (
-                        <>
-                          <img
-                            src={`${baseURL}/${post?.image.replace(
-                              /\\/g,
-                              "/"
-                            )}`}
-                            alt="Preview"
-                            className={styles.image}
-                          />
-                          <span
-                            className={styles.deteleicon}
-                            onClick={() => handleDelete(post.id)}
-                          >
-                            <BsTrash2 />
-                          </span>
-                          <span
-                            className={styles.editicon}
-                            onClick={() => handleEdit(post.id)}
-                          >
-                            <HiPencilAlt />
-                          </span>
-                        </>
-                      )}
-                    </div>
-                    {/* Conditionally render the image */}
-                  </div>
+        {posts
+          .filter(
+            (post) =>
+              selectedFilter === "All entries" || post.tag === selectedFilter
+          )
+          .map((post) => (
+            <div key={post.id} className="mb-5 mt-1">
+              {/* <input
+                type="checkbox"
+                checked={selectedPosts.includes(post.id)}
+                onChange={() => handleCheckboxChange(post.id)}
+                className="large-checkbox"
+              /> */}
+              {selectedPosts.includes(post.id) && (
+                <div className="w-50" >
+                  <CreatableSelect
+                    isMulti
+                    isClearable
+                    onChange={handleCreatableSelectChange}
+                    options={options}
+                    value={selectedEmails}
+                   
+                  />
+                  <Button>Send</Button>
                 </div>
-
-                <hr className=" mt-5" style={{ width: "100%" }} />
-              </>
-            ))
-        ) : (
-          <div>
-          <div className="d-flex justify-content-center text-secondary  ">
-           < CiSearch  style={{color:"",width:100,height:"100",fontWeight:"100"}} />
-          </div>
-          <p className="d-flex justify-content-center">We couldn’t find any changelog entries matching<span className="fw-bold">"{NewseachTerm}"</span> </p>
-          <p className="d-flex justify-content-center">Try searching for other keywords.</p>
-          </div>
-        )}
+              )}
+            </div>
+          ))}
       </div>
+      {posts
+        .filter(
+          (post) =>
+            selectedFilter === "All entries" || post.tag === selectedFilter
+        )
+        .map((post) => (
+          <>
+            <input
+              type="checkbox"
+              checked={selectedPosts.includes(post.id)}
+              onChange={() => handleCheckboxChange(post.id)}
+              className="large-checkbox"
+              style={{marginLeft:"110px"}}
+            />{" "}
+            <div
+              key={post.id}
+              className="mb-5 mt-1"
+              style={{
+                borderRadius: "8px",
+                margin: "3%",
+                marginLeft: "26%",
+              }}
+            >
+              <div className={styles.dateandnew}>
+                <p className={styles.date}>
+                  {moment(post.createdAt).format("MMMM D ,yyyy")}
+                </p>{" "}
+                <div className={styles.new}>
+                  <span
+                    className={
+                      post.tag === "New"
+                        ? "badge green"
+                        : post.tag === "Improved"
+                        ? "badge blue"
+                        : "badge yellow"
+                    }
+                    style={{}}
+                  >
+                    {post.tag}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-6">
+                <h3>{post.title}</h3>
+                <Button
+                  variant="outline-light"
+                  className={styles.plusebutton}
+                  style={{
+                    color: "black",
+                          color: "black",
+                          border: "1px solid rgb(184, 175, 175)",
+                        }}
+                        onClick={() => toggleDescription(post.id)}
+                      >
+                         {showFullDescription[post.id] ? (
+                    <BsDash
+                      className="mb-2"
+                      style={{ position: "relative", right: "8px" }}
+                    />
+                  ) : (
+                    <BsPlus
+                      className="mb-2  "
+                      style={{
+                        position: "relative",
+                        right: "8px",
+                        bottom: "2px",
+                      }}
+                    />
+                  )}{" "}
+                  {/* Use icons */}
+                </Button>
+                {/* <Button
+                  variant="danger"
+                  className={styles.deleteButton}
+                  onClick={() => handleDelete(post.id)}
+                >
+                  <MdDelete />
+                </Button> */}
+              </div>
+              <div>
+                <div className={styles.descrip}>
+                  {showFullDescription[post.id] ? (
+                    <p>{post.description}</p>
+                  ) : (
+                    <p>{post.description.substring(0, 200)}</p>
+                  )}
+                  {showFullDescription[post.id] && (
+                    <>
+                      <img
+                        src={`${baseURL}/${post?.image.replace(
+                          /\\/g,
+                          "/"
+                        )}`}
+                        alt="Preview"
+                        className={styles.image}
+                      />
+                      <span
+                        className={styles.deteleicon}
+                        onClick={() => handleDelete(post.id)}
+                      >
+                        <BsTrash2 />
+                      </span>
+                      <span
+                        className={styles.editicon}
+                        onClick={() => handleEdit(post.id)}
+                      >
+                        <HiPencilAlt />
+                      </span>
+                    </>
+                  )}
+                </div>
+                {/* Conditionally render the image */}
+              </div>
+            </div>
+            <hr className=" mt-5" style={{ width: "100%" }} />
+          </>
+        ))}
+      {posts.length === 0 && (
+        <div>
+          <div className="d-flex justify-content-center text-secondary  ">
+            <CiSearch
+              style={{ color: "", width: 100, height: "100", fontWeight: "100" }}
+            />
+          </div>
+          <p className="d-flex justify-content-center">
+            We couldn’t find any changelog entries matching
+            <span className="fw-bold">"{NewseachTerm}"</span>
+          </p>
+          <p className="d-flex justify-content-center">
+            Try searching for other keywords.
+          </p>
+        </div>
+      )}
       <Footer />
     </>
   );
