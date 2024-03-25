@@ -1,11 +1,14 @@
 .green{
-  background-color: rgb(28, 130, 199) !important;
+  background-color: rgba(69, 150, 156, 0.346) !important;
+  color: rgba(58, 119, 123, 0.95) !important;
 }
 .blue{
-  background-color: rgb(14, 86, 43) !important;
+  background-color: rgba(5, 181, 76, 0.318) !important;
+  color: rgba(7, 112, 49, 0.956) !important;
 }
 .yellow{
-  background-color: rgb(200, 123, 22) !important;
+  background-color: rgba(255, 204, 137, 0.594) !important;
+  color: rgba(253, 150, 14, 0.822) !important;
 }
 
 .large-checkbox {

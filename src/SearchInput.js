@@ -46,7 +46,7 @@ export default function SearchInput({
 
   return (
     <div>
-      <Container className=" d-flex justify-content-end  mb-5">
+      <Container className=" d-flex justify-content-end  mb-2">
         <Row className="w-30">
           <Col className="mt-2">
             <div className="input-group">
