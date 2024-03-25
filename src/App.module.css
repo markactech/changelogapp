@@ -18,6 +18,12 @@
   width: 10px;
   height: 30px;
 }
+
+.groupbox{
+  border-radius: 8px;
+  margin-top: -3rem !important;
+  margin-left: 26%
+}
 .searchinput {
   width: 135%;
   border-radius: 5px;

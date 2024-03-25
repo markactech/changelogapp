@@ -64,7 +64,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
           formData.append("email", email);
           formData.append("image", newImageFile);
           formData.append("type", logType);
-          console.log("formData", formData);
+          console.log("formData *****************", formData);
 
           response = await axios.post(
             `${"http://localhost:8080"}/posts`,

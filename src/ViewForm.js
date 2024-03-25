@@ -12,6 +12,7 @@ import Footer from "./component/Footer ";
 import CreatableSelect from "react-select/creatable";
 import "./ViewForm.css";
 import { CiSearch } from "react-icons/ci";
+import { Spinner } from "react-bootstrap";
 
 function ViewForm() {
   const [posts, setPosts] = useState([]);
@@ -19,8 +20,8 @@ function ViewForm() {
   const [selectedFilter, setSelectedFilter] = useState("All entries");
   const [showFullDescription, setShowFullDescription] = useState({});
   const [selectAll, setSelectAll] = useState(false);
-  const [selectedMails, setSelectedMails] = useState([]);
-  const [allEmails, setAllEmails] = useState([]);
+   const [allEmails, setAllEmails] = useState([]);
+   const [loader,setLoader] =useState(false)
   const [selectedEmails, setSelectedEmails] = useState([]);
   const navigate = useNavigate();
 const [NewseachTerm,setNewSearchTerm] =useState("")
@@ -31,25 +32,25 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
     });
   };
   useEffect(() => {
-    // Fetch posts and emails on component mount
-    
     getAllEmails(); // Fetch all emails
   }, []);
-   const getCurrentDate = () => {
-    const currentDate = moment();
-    const formattedDate = currentDate.format("MMMM DD, YYYY");
-    return formattedDate;
-  };
+   
   const getAllEmails = async () => {
     try {
       const response = await axios.get("http://localhost:8080/emaillist");
-      setAllEmails(response.data);
+      console.log("response" ,response?.data);
+      const allemail = response?.data?.map(x=>{
+        return{
+          label:x?.email,
+          value:x?.email
+        }
+      })
+      setAllEmails(allemail);
     } catch (error) {
       console.error("Error fetching emails:", error);
     }
   };
   const setPasstoparent=(data)=>{
-    console.log("setPasstoparent",data);
     setNewSearchTerm(data)
   }
   useEffect(() => {
@@ -59,7 +60,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
       .then((response) => {
         console.log("Posts:", response.data);
         setPosts(response.data);
-        getAllEmails();
+       
         const initialShowDescriptionState = {};
         response.data.forEach((post) => {
           initialShowDescriptionState[post.id] = true;
@@ -70,7 +71,6 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
         console.error("Error fetching posts:", error);
       });
   }, []);
-
   const handleDelete = async (postId) => {
     try {
       await axios.delete(`http://localhost:8080/posts/${postId}`);
@@ -96,6 +96,43 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
     });
   };
 
+ 
+  const handleCreatableSelectChange = (newValue) => {
+    console.log("Selected mails:", newValue);
+    setSelectedEmails(newValue);
+   };
+  
+
+  const sendEmailformultiple=()=>{
+      const getpostlist = posts?.filter(x=>selectedPosts.includes(x.id))
+      console.log("data ************************************",selectedEmails)
+    console.log("getpostlist",getpostlist)
+     selectedEmails?.forEach(async(p,index)=>{
+     const postlist= getpostlist?.map(x=>{
+        return {
+          ...x,
+          email:p?.value
+        }
+      })
+      console.log(`postlist ${index}`);
+      setLoader(true)
+      postlist?.map(async(data)=>{
+          console.log("data",data)
+        try {
+          await axios.post(`http://localhost:8080/sendEmail`,data);
+         } catch (error) {
+          console.error("Error deleting post:", error);
+        }
+
+        
+      })
+    
+     })
+     setLoader(false);
+     setSelectedEmails([]);
+     setSelectedPosts([])
+    
+  }
   const handleSelectAll = () => {
     if (selectAll) {
       setSelectedPosts([]);
@@ -105,17 +142,6 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
     }
     setSelectAll(!selectAll);
   };
-
-  const handleCreatableSelectChange = (newValue) => {
-    setSelectedEmails(newValue);
-    console.log("Selected mails:", newValue);
-    console.log("selected Posts", selectedPosts);
-  };
-  const options = allEmails.map((email) => ({
-    value: email.id,
-    label: email.email
-  }));
-
 
  
   return (
@@ -133,27 +159,34 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
           <>
             <div className="mb-3 d-flex justify-content-evenly"
             style={{}}>
-              <div className="w-50" style={{position:"relative" , top:"42px"}}>
+              <div className="w-50" style={{position:"relative" }}>
                 <CreatableSelect
                   isMulti
                   isClearable
                   onChange={handleCreatableSelectChange}
-                  options={options}
-                  value={selectedEmails}
-                  styles={{}}
+                  options={allEmails}
+                
                 />
               </div>
-              <Button style={{position:"relative",top:"42px",right:"190px"}} >Send</Button>
+              <Button disabled={loader} onClick={sendEmailformultiple} style={{position:"relative" ,right:"140px"}} >
+              {loader ? (
+                        <Spinner animation="border" size="sm" /> // Show spinner when loading
+                      ) : (
+                        "Send"
+                      )}
+
+              </Button>
             </div>
 
-            <div className="mb-3">
+            <div  style={{position:"relative " ,bottom:"40px"}}>
               <input
                 type="checkbox"
+
                 checked={selectAll}
                 onChange={handleSelectAll}
                 className="large-checkbox"
               />{" "}
-              Select All
+                Select All
             </div>
 
             <hr />
@@ -173,12 +206,8 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
                   />{" "}
                   <div
                     key={post.id}
-                    className="mb-5 mt-1"
-                    style={{
-                      borderRadius: "8px",
-                      margin: "3%",
-                      marginLeft: "26%",
-                    }}
+                    className={styles.groupbox}
+                   
                   >
                     <div className={styles.dateandnew}>
                       <p className={styles.date}>
