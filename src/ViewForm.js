@@ -157,16 +157,23 @@ function ViewForm() {
           <>
             <div className="mb-3 d-flex justify-content-evenly"
               style={{}}>
-              <div className="w-50" style={{ position: "relative" }}>
+              <div className="w-50" style={{ position: "relative" ,top:"40px" }}>
                 <CreatableSelect
                   isMulti
                   isClearable
                   onChange={handleCreatableSelectChange}
                   options={allEmails}
                   value={selectedEmails}
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      width: '100%', // Set the desired width here
+                    }),
+
+                  }}
                 />
               </div>
-              <Button disabled={loader} onClick={sendEmailformultiple} style={{ position: "relative", right: "140px" }} >
+              <Button disabled={loader} onClick={sendEmailformultiple} style={{ position: "relative", right: "190px" ,top:"40px" }} >
                 {loader ? (
                   <Spinner animation="border" size="sm" /> // Show spinner when loading
                 ) : (
@@ -176,7 +183,8 @@ function ViewForm() {
               </Button>
             </div>
 
-            <div style={{ position: "relative ", bottom: "40px" }}>
+            <div style={{ position: "relative", right: "10x" ,bottom:"5px" }}
+>
               <input
                 type="checkbox"
 
