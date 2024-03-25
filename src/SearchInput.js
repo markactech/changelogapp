@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { CiFilter } from "react-icons/ci";
+import { CiFilter, CiSearch } from "react-icons/ci";
 import styles from "./App.module.css";
 import { Dropdown } from "react-bootstrap";
 import axios from "axios";
@@ -50,6 +50,20 @@ export default function SearchInput({
         <Row className="w-30">
           <Col className="mt-2">
             <div className="input-group">
+              <div
+                className="input-group-prepend"
+                style={{
+                  position: "absolute",
+                  left: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: "1000",
+                }}
+              >
+                <span>
+                  <CiSearch />
+                </span>
+              </div>
               <input
                 type="text"
                 className="form-control"
@@ -58,6 +72,7 @@ export default function SearchInput({
                 placeholder="Search Entries..."
                 value={searchTerm}
                 onChange={handleChange}
+                style={{ paddingLeft: "30px" }}
               />
             </div>
           </Col>

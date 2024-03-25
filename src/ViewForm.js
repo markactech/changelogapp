@@ -122,7 +122,7 @@ function ViewForm() {
       <div className="container mb-5">
         {posts.length > 0 ? (
           <>
-            <div className="mb-3 d-flex justify-content-evenly">
+            <div className="mx-5 mb-5 d-flex">
               <div className="w-50">
                 <CreatableSelect
                   isMulti
@@ -130,7 +130,9 @@ function ViewForm() {
                   onChange={handleCreatableSelectChange}
                 />
               </div>
-              <Button onClick={handleSendData}>Send</Button>
+              <div style={{ marginLeft: "20px" }}>
+                <Button onClick={handleSendData}>Send</Button>
+              </div>
             </div>
 
             <div className="mb-3">
