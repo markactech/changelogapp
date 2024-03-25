@@ -8,6 +8,7 @@ import AddLogForm from "./AddLogForm";
 import Layout from "./component/Layout";
 import Header from "./Header";
 import Footer from "./component/Footer ";
+import Setting from "./component/Setting";
  
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
         <Route path="/addlogs" exact  element={<AddLogForm/>}/>
         <Route path="/preview/id" exact  element={<AddLogForm/>}/>
         <Route path="/editlog/:id" exact  element={<AddLogForm/>}/>
+        <Route path="/setting" exact  element={<Setting/>}/>
         
         </Route>
        

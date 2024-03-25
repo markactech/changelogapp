@@ -3,8 +3,7 @@ import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
 import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
-import { MdDelete } from "react-icons/md";
-import Badge from "react-bootstrap/Badge";
+
 import moment from "moment";
 import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
@@ -12,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./component/Footer ";
 import "./ViewForm.css";
-
+import { IoSearch } from "react-icons/io5"
 function ViewForm() {
   const [posts, setPosts] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All entries");
@@ -185,8 +184,12 @@ function ViewForm() {
               </>
             ))
         ) : (
-          <div className="d-flex justify-content-center">
-            No data to display
+          <div>
+          <div className="d-flex justify-content-center text-secondary  ">
+           < IoSearch style={{color:"",width:100,height:"100",fontWeight:"100"}} />
+          </div>
+          <p className="d-flex justify-content-center fw-bold text-secondary ">No Log Founds</p>
+          <p className="d-flex justify-content-center fw-bold text-secondary  ">Try a Different Search</p>
           </div>
         )}
       </div>

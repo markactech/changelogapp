@@ -248,7 +248,8 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                     <div className="mt-4">
                       <Button
                         variant="primary"
-                        className="me-2 ms-5"
+                        className="me-2"
+                        style={{marginLeft:"5%"}}
                         onClick={() => {
                           handleSubmit();
 
