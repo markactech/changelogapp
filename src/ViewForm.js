@@ -12,7 +12,7 @@ import Footer from "./component/Footer ";
 import CreatableSelect from "react-select/creatable";
 import "./ViewForm.css";
 import { CiSearch } from "react-icons/ci";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Toast } from "react-bootstrap";
 
 function ViewForm() {
   const [posts, setPosts] = useState([]);
@@ -24,6 +24,8 @@ function ViewForm() {
   const [loader, setLoader] = useState(false)
   const [selectedEmails, setSelectedEmails] = useState([]);
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false)
+  const [toatermessage, setToastMessage] = useState("")
   const [NewseachTerm, setNewSearchTerm] = useState("")
   const toggleDescription = (postId) => {
     setShowFullDescription({
@@ -34,7 +36,7 @@ function ViewForm() {
   useEffect(() => {
     getAllEmails(); // Fetch all emails
   }, []);
-
+  console.log("selectAll", selectedPosts)
   const getAllEmails = async () => {
     try {
       const response = await axios.get("http://localhost:8080/emaillist");
@@ -104,7 +106,7 @@ function ViewForm() {
 
 
   const sendEmailformultiple = () => {
-    setLoader(true)
+
     const getpostlist = posts?.filter(x => selectedPosts.includes(x.id))
     selectedEmails?.forEach(async (p, index) => {
       const postlist = getpostlist?.map(x => {
@@ -114,10 +116,18 @@ function ViewForm() {
         }
       })
 
+      setLoader(true)
       postlist?.map(async (data) => {
         try {
+
           await axios.post(`http://localhost:8080/sendEmail`, data);
+          setShowToast(true)
+          setToastMessage("Mail Send successfully");
+
         } catch (error) {
+          setShowToast(true)
+          setToastMessage("Not Send");
+
           console.error("Error deleting post:", error);
         }
 
@@ -127,20 +137,19 @@ function ViewForm() {
     })
     setLoader(false);
     setSelectedEmails([]);
-    setSelectAll([])
+    setSelectAll(false)
     setSelectedPosts([])
 
   }
   const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedPosts([]);
-    } else {
+    if (!selectAll) {
       const allPostIds = posts.map((post) => post.id);
       setSelectedPosts(allPostIds);
+    } else {
+      setSelectedPosts([]);
     }
     setSelectAll(!selectAll);
   };
-
 
   return (
     <>
@@ -179,13 +188,28 @@ function ViewForm() {
             <div style={{ position: "relative ", bottom: "40px" }}>
               <input
                 type="checkbox"
-
-                checked={selectAll}
+                checked={selectAll} // Check if all posts are selected
                 onChange={handleSelectAll}
                 className="large-checkbox"
-              />{" "}
-              Select All
+            
+              />
+             <label className="ms-2">Select All </label> 
             </div>
+
+            <Toast
+              show={showToast}
+              onClose={() => setShowToast(false)}
+
+              className={
+                toatermessage.includes("Failed") ? "bg-danger" : "bg-success"
+              }
+
+              autohide
+              style={{ color: "white", position: 'absolute', top: '80px', right: '10px', zIndex: 9999 }}              >
+
+
+              <Toast.Body>{toatermessage}</Toast.Body>
+            </Toast>
 
             <hr />
             {posts
