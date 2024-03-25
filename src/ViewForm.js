@@ -3,7 +3,7 @@ import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
 import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
- import moment from "moment";
+import moment from "moment";
 import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
@@ -20,11 +20,11 @@ function ViewForm() {
   const [selectedFilter, setSelectedFilter] = useState("All entries");
   const [showFullDescription, setShowFullDescription] = useState({});
   const [selectAll, setSelectAll] = useState(false);
-   const [allEmails, setAllEmails] = useState([]);
-   const [loader,setLoader] =useState(false)
+  const [allEmails, setAllEmails] = useState([]);
+  const [loader, setLoader] = useState(false)
   const [selectedEmails, setSelectedEmails] = useState([]);
   const navigate = useNavigate();
-const [NewseachTerm,setNewSearchTerm] =useState("")
+  const [NewseachTerm, setNewSearchTerm] = useState("")
   const toggleDescription = (postId) => {
     setShowFullDescription({
       ...showFullDescription,
@@ -34,15 +34,15 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
   useEffect(() => {
     getAllEmails(); // Fetch all emails
   }, []);
-   
+
   const getAllEmails = async () => {
     try {
       const response = await axios.get("http://localhost:8080/emaillist");
-      console.log("response" ,response?.data);
-      const allemail = response?.data?.map(x=>{
-        return{
-          label:x?.email,
-          value:x?.email
+      console.log("response", response?.data);
+      const allemail = response?.data?.map(x => {
+        return {
+          label: x?.email,
+          value: x?.email
         }
       })
       setAllEmails(allemail);
@@ -50,7 +50,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
       console.error("Error fetching emails:", error);
     }
   };
-  const setPasstoparent=(data)=>{
+  const setPasstoparent = (data) => {
     setNewSearchTerm(data)
   }
   useEffect(() => {
@@ -60,7 +60,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
       .then((response) => {
         console.log("Posts:", response.data);
         setPosts(response.data);
-       
+
         const initialShowDescriptionState = {};
         response.data.forEach((post) => {
           initialShowDescriptionState[post.id] = true;
@@ -96,42 +96,40 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
     });
   };
 
- 
+
   const handleCreatableSelectChange = (newValue) => {
     console.log("Selected mails:", newValue);
     setSelectedEmails(newValue);
-   };
-  
+  };
 
-  const sendEmailformultiple=()=>{
-      const getpostlist = posts?.filter(x=>selectedPosts.includes(x.id))
-      console.log("data ************************************",selectedEmails)
-    console.log("getpostlist",getpostlist)
-     selectedEmails?.forEach(async(p,index)=>{
-     const postlist= getpostlist?.map(x=>{
+
+  const sendEmailformultiple = () => {
+    setLoader(true)
+    const getpostlist = posts?.filter(x => selectedPosts.includes(x.id))
+    selectedEmails?.forEach(async (p, index) => {
+      const postlist = getpostlist?.map(x => {
         return {
           ...x,
-          email:p?.value
+          email: p?.value
         }
       })
-      console.log(`postlist ${index}`);
-      setLoader(true)
-      postlist?.map(async(data)=>{
-          console.log("data",data)
+
+      postlist?.map(async (data) => {
         try {
-          await axios.post(`http://localhost:8080/sendEmail`,data);
-         } catch (error) {
+          await axios.post(`http://localhost:8080/sendEmail`, data);
+        } catch (error) {
           console.error("Error deleting post:", error);
         }
 
-        
+
       })
-    
-     })
-     setLoader(false);
-     setSelectedEmails([]);
-     setSelectedPosts([])
-    
+
+    })
+    setLoader(false);
+    setSelectedEmails([]);
+    setSelectAll([])
+    setSelectedPosts([])
+
   }
   const handleSelectAll = () => {
     if (selectAll) {
@@ -143,7 +141,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
     setSelectAll(!selectAll);
   };
 
- 
+
   return (
     <>
       <Header />
@@ -152,33 +150,33 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         setPasstoparent={setPasstoparent}
-        
+
       />
       <div className="container mb-5">
         {posts.length > 0 ? (
           <>
             <div className="mb-3 d-flex justify-content-evenly"
-            style={{}}>
-              <div className="w-50" style={{position:"relative" }}>
+              style={{}}>
+              <div className="w-50" style={{ position: "relative" }}>
                 <CreatableSelect
                   isMulti
                   isClearable
                   onChange={handleCreatableSelectChange}
                   options={allEmails}
-                
+                  value={selectedEmails}
                 />
               </div>
-              <Button disabled={loader} onClick={sendEmailformultiple} style={{position:"relative" ,right:"140px"}} >
-              {loader ? (
-                        <Spinner animation="border" size="sm" /> // Show spinner when loading
-                      ) : (
-                        "Send"
-                      )}
+              <Button disabled={loader} onClick={sendEmailformultiple} style={{ position: "relative", right: "140px" }} >
+                {loader ? (
+                  <Spinner animation="border" size="sm" /> // Show spinner when loading
+                ) : (
+                  "Send"
+                )}
 
               </Button>
             </div>
 
-            <div  style={{position:"relative " ,bottom:"40px"}}>
+            <div style={{ position: "relative ", bottom: "40px" }}>
               <input
                 type="checkbox"
 
@@ -186,7 +184,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
                 onChange={handleSelectAll}
                 className="large-checkbox"
               />{" "}
-                Select All
+              Select All
             </div>
 
             <hr />
@@ -207,7 +205,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
                   <div
                     key={post.id}
                     className={styles.groupbox}
-                   
+
                   >
                     <div className={styles.dateandnew}>
                       <p className={styles.date}>
@@ -219,8 +217,8 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
                             post.tag === "New"
                               ? "badge green"
                               : post.tag === "Improved"
-                              ? "badge blue"
-                              : "badge yellow"
+                                ? "badge blue"
+                                : "badge yellow"
                           }
                           style={{}}
                         >
@@ -256,7 +254,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
                         )}{" "}
                         {/* Use icons */}
                       </Button>
-                      
+
                     </div>
                     <div>
                       <div className={styles.descrip}>
@@ -299,11 +297,11 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
           </>
         ) : (
           <div>
-          <div className="d-flex justify-content-center text-secondary  ">
-           < CiSearch  style={{color:"",width:100,height:"100",fontWeight:"100"}} />
-          </div>
-          <p className="d-flex justify-content-center">We couldn’t find any changelog entries matching<span className="fw-bold">"{NewseachTerm}"</span> </p>
-          <p className="d-flex justify-content-center">Try searching for other keywords.</p>
+            <div className="d-flex justify-content-center text-secondary  ">
+              < CiSearch style={{ color: "", width: 100, height: "100", fontWeight: "100" }} />
+            </div>
+            <p className="d-flex justify-content-center">We couldn’t find any changelog entries matching<span className="fw-bold">"{NewseachTerm}"</span> </p>
+            <p className="d-flex justify-content-center">Try searching for other keywords.</p>
           </div>
         )}
 
