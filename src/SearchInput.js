@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { CiFilter } from "react-icons/ci";
+import { CiFilter, CiSearch } from "react-icons/ci";
 import styles from "./App.module.css";
 import { Dropdown } from "react-bootstrap";
 import axios from "axios";
@@ -11,15 +11,26 @@ export default function SearchInput({
   setPosts,
   selectedFilter,
   setSelectedFilter,
+  setPasstoparent
+  
+  
 }) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [NewseachTerm, setNewSearchTerm] = useState("");
+  const [searchedTerm, setSearchedTerm] = useState("");
+  const [noResults, setNoResults] = useState(false);
+
+  useEffect(() => {
+    handleSearch(searchedTerm);
+  }, [selectedFilter, searchedTerm]); 
 
   const handleChange = (event) => {
     const value = event.target.value;
-    setSearchTerm(value);
-    if (value.length >= 4 || value.length == 0) {
-      handleSearch(value);
+    setNewSearchTerm(value);
+    setPasstoparent(value)
+    if (value.length >= 3 || value.length === 0) {
+      setSearchedTerm(value);
     } else {
+      setNoResults(false);
       setPosts([]);
     }
   };
@@ -30,8 +41,10 @@ export default function SearchInput({
       .then((response) => {
         if (response.data) {
           setPosts(response.data);
+          setNoResults(response.data.length === 0);
         } else {
           setPosts([]);
+          setNoResults(true);
         }
       })
       .catch((error) => {
@@ -41,7 +54,6 @@ export default function SearchInput({
 
   const handleFilterSelect = (selectedValue) => {
     setSelectedFilter(selectedValue);
-    handleSearch(searchTerm);
   };
 
   return (
@@ -56,7 +68,7 @@ export default function SearchInput({
                 style={{ width: "10px", position: "relative", left: "14%" }}
                 aria-label="Text input with radio button"
                 placeholder="Search Entries..."
-                value={searchTerm}
+                value={NewseachTerm}
                 onChange={handleChange}
               />
             </div>
@@ -92,7 +104,24 @@ export default function SearchInput({
             </Dropdown>
           </Col>
         </Row>
+        {/* {noResults && (
+          <div className="d-flex flex-column align-items-center mt-3">
+            <CiSearch
+              style={{
+                color: "gray",
+                width: 100,
+                height: 100,
+                fontWeight: 100,
+              }}
+            />
+            <p className="text-secondary">
+              No Logs Found for "{NewseachTerm}"
+            </p>
+            <p className="text-secondary">Try a Different Search</p>
+          </div>
+        )} */}
       </Container>
     </div>
   );
 }
+

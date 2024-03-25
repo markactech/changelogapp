@@ -3,7 +3,7 @@ import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
 import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
-
+import { CiSearch } from "react-icons/ci";
 import moment from "moment";
 import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
@@ -16,6 +16,7 @@ function ViewForm() {
   const [posts, setPosts] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All entries");
   const [showFullDescription, setShowFullDescription] = useState({});
+  const [NewseachTerm,setNewSearchTerm] =useState("")
   const navigate = useNavigate();
 
   const toggleDescription = (postId) => {
@@ -25,6 +26,7 @@ function ViewForm() {
     });
   };
 
+  console.log("NewseachTerm *************" ,NewseachTerm)
   const getCurrentDate = () => {
     const currentDate = moment();
     const formattedDate = currentDate.format("MMMM DD, YYYY");
@@ -59,6 +61,10 @@ function ViewForm() {
     navigate(`/editlog/${id}`);
   };
 
+  const setPasstoparent=(data)=>{
+    console.log("setPasstoparent",data);
+    setNewSearchTerm(data)
+  }
   return (
     <>
       <Header />
@@ -66,6 +72,8 @@ function ViewForm() {
         setPosts={setPosts}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
+        setPasstoparent={setPasstoparent}
+        
       />
       <div className="container mb-5">
         <hr />
@@ -186,10 +194,10 @@ function ViewForm() {
         ) : (
           <div>
           <div className="d-flex justify-content-center text-secondary  ">
-           < IoSearch style={{color:"",width:100,height:"100",fontWeight:"100"}} />
+           < CiSearch  style={{color:"",width:100,height:"100",fontWeight:"100"}} />
           </div>
-          <p className="d-flex justify-content-center fw-bold text-secondary ">No Log Founds</p>
-          <p className="d-flex justify-content-center fw-bold text-secondary  ">Try a Different Search</p>
+          <p className="d-flex justify-content-center">We couldn’t find any changelog entries matching<span className="fw-bold">"{NewseachTerm}"</span> </p>
+          <p className="d-flex justify-content-center">Try searching for other keywords.</p>
           </div>
         )}
       </div>
