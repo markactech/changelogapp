@@ -3,8 +3,7 @@ import axios from "axios"; // Import Axios
 import Button from "react-bootstrap/Button";
 import { BsPlus, BsDash, BsTrash2 } from "react-icons/bs"; // Import icons from React Icons library
 import styles from "./App.module.css";
-import { MdDelete } from "react-icons/md";
-import moment from "moment";
+ import moment from "moment";
 import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
@@ -228,13 +227,7 @@ const [NewseachTerm,setNewSearchTerm] =useState("")
                         )}{" "}
                         {/* Use icons */}
                       </Button>
-                      {/* <Button
-              variant="danger"
-              className={styles.deleteButton}
-              onClick={() => handleDelete(post.id)}
-            >
-              <MdDelete />
-            </Button> */}
+                      
                     </div>
                     <div>
                       <div className={styles.descrip}>
