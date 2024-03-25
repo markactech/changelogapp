@@ -14,7 +14,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
   const [logType, setLogType] = useState("New"); // State for log type
   const navigate = useNavigate();
   const [imagepreview, setPreviewImageUrl] = useState(null);
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false); // State for spinner
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
   const [showToast, setShowToast] = useState(false); // State for showing toast
@@ -30,7 +30,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
     if (
       newImageTitle.trim() !== "" &&
       newImageDescription.trim() !== "" &&
-      // email.trim() !== "" &&
+      email.trim() !== "" &&
       newImageFile
     ) {
       setLoading(true); // Show spinner
@@ -43,7 +43,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
           const formDatanew = new FormData();
           formDatanew.append("title", newImageTitle);
           formDatanew.append("description", newImageDescription);
-          // formDatanew.append("email", email);
+          formDatanew.append("email", email);
           formDatanew.append("image", newImageFile);
           formDatanew.append("type", logType);
 
@@ -61,7 +61,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
           const formData = new FormData();
           formData.append("title", newImageTitle);
           formData.append("description", newImageDescription);
-          // formData.append("email", email);
+          formData.append("email", email);
           formData.append("image", newImageFile);
           formData.append("type", logType);
           console.log("formData", formData);
@@ -115,7 +115,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
     setNewImageTitle(postdata?.data?.title);
     setNewImageDescription(postdata?.data?.description);
     setNewImageUrl(postdata?.data?.image);
-    // setEmail(postdata?.data?.email);
+    setEmail(postdata?.data?.email);
   };
   React.useEffect(() => {
     if (id) {
@@ -161,7 +161,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                     </div>
                   </div>
 
-                  {/* <div className="row  mb-3 ms-5 mt-3">
+                  <div className="row  mb-3 ms-5 mt-3">
                     <div className="col-md-12">
                       <label for="exampleInputEmail1" className="form-label">
                         Email
@@ -176,7 +176,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                         onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
-                  </div> */}
+                  </div>
 
                   <div className="row  mb-3 ms-5 mt-3">
                     <div className="col-md-12">
