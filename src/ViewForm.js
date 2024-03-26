@@ -8,7 +8,7 @@ import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
-import Footer from "./component/Footer ";
+import Footer from './component/Footer '
 import CreatableSelect from "react-select/creatable";
 import "./ViewForm.css";
 import { CiSearch } from "react-icons/ci";
@@ -27,6 +27,7 @@ function ViewForm() {
   const [showToast, setShowToast] = useState(false)
   const [toatermessage, setToastMessage] = useState("")
   const [NewseachTerm, setNewSearchTerm] = useState("")
+  const baseURL = "http://localhost:8080"; 
   const toggleDescription = (postId) => {
     setShowFullDescription({
       ...showFullDescription,
@@ -39,7 +40,7 @@ function ViewForm() {
   console.log("selectAll", selectedPosts)
   const getAllEmails = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/emaillist");
+      const response = await axios.get(`${baseURL}/emaillist`);
       console.log("response", response?.data);
       const allemail = response?.data?.map(x => {
         return {
@@ -58,7 +59,7 @@ function ViewForm() {
   useEffect(() => {
     console.log("Fetching posts...");
     axios
-      .get("http://localhost:8080/posts")
+      .get(`${baseURL}/posts`)
       .then((response) => {
         console.log("Posts:", response.data);
         setPosts(response.data);
@@ -75,14 +76,14 @@ function ViewForm() {
   }, []);
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:8080/posts/${postId}`);
+      await axios.delete(`${baseURL}/posts/${postId}`);
       // Update posts state by removing the deleted post
       setPosts(posts.filter((post) => post.id !== postId));
     } catch (error) {
       console.error("Error deleting post:", error);
     }
   };
-  const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
+  // Update this with your actual backend URL
 
   const handleEdit = (id) => {
     navigate(`/editlog/${id}`);
@@ -104,7 +105,7 @@ function ViewForm() {
     setSelectedEmails(newValue);
   };
 
-
+console.log("loadeir",loader)
   const sendEmailformultiple = () => {
 
     const getpostlist = posts?.filter(x => selectedPosts.includes(x.id))
@@ -116,18 +117,17 @@ function ViewForm() {
         }
       })
 
-      setLoader(true)
+     
       postlist?.map(async (data) => {
         try {
-
-          await axios.post(`http://localhost:8080/sendEmail`, data);
+          setLoader(true)
+          await axios.post(`${baseURL}/sendEmail`, data);
           setShowToast(true)
           setToastMessage("Mail Send successfully");
 
         } catch (error) {
           setShowToast(true)
-          setToastMessage("Not Send");
-
+          setToastMessage("Failed to Send");
           console.error("Error deleting post:", error);
         }
 
@@ -135,8 +135,8 @@ function ViewForm() {
       })
 
     })
-    setLoader(false);
-    setSelectedEmails([]);
+    setTimeout(()=>setLoader(false),10000)
+     setSelectedEmails([]);
     setSelectAll(false)
     setSelectedPosts([])
 
@@ -161,28 +161,32 @@ function ViewForm() {
         setPasstoparent={setPasstoparent}
 
       />
-      <div className="container mb-5">
+      <div className="container mt-3 ">
         {posts.length > 0 ? (
           <>
-            <div className="mb-3 d-flex justify-content-evenly"
-              style={{}}>
-              <div className="w-50" style={{ position: "relative" ,top:"40px" }}>
+            <div className="mb-3 d-flex justify-content-between "
+        >
+            <div  className="d-flex justify-content-start">
+              <input
+                type="checkbox"
+                checked={selectAll} // Check if all posts are selected
+                onChange={handleSelectAll}
+                className="large-checkbox"
+            
+              />
+             <label className="ms-2 mt-2">Select All </label> 
+            </div>
+              <div className="w-50  " style={{marginRight:"25%"}}  >
                 <CreatableSelect
                   isMulti
                   isClearable
                   onChange={handleCreatableSelectChange}
                   options={allEmails}
                   value={selectedEmails}
-                  styles={{
-                    control: (provided) => ({
-                      ...provided,
-                      width: '100%', // Set the desired width here
-                    }),
-
-                  }}
+                  styles={{}}
                 />
               </div>
-              <Button disabled={loader} onClick={sendEmailformultiple} style={{ position: "relative", right: "190px" ,top:"40px" }} >
+              <Button disabled={loader} onClick={sendEmailformultiple} style={{ position: "relative", right: "29%" }} >
                 {loader ? (
                   <Spinner animation="border" size="sm" /> // Show spinner when loading
                 ) : (
@@ -192,17 +196,7 @@ function ViewForm() {
               </Button>
             </div>
 
-            <div style={{ position: "relative", right: "10x" ,bottom:"5px" }}
->
-              <input
-                type="checkbox"
-                checked={selectAll} // Check if all posts are selected
-                onChange={handleSelectAll}
-                className="large-checkbox"
-            
-              />
-             <label className="ms-2">Select All </label> 
-            </div>
+          
 
             <Toast
               show={showToast}

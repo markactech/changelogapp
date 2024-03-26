@@ -18,7 +18,7 @@ export default function SearchInput({
   const [NewseachTerm, setNewSearchTerm] = useState("");
   const [searchedTerm, setSearchedTerm] = useState("");
   const [noResults, setNoResults] = useState(false);
-
+  const baseURL = "http://localhost:8080";
   useEffect(() => {
     handleSearch(searchedTerm);
   }, [selectedFilter, searchedTerm]); 
@@ -37,7 +37,7 @@ export default function SearchInput({
 
   const handleSearch = (term) => {
     axios
-      .get(`http://localhost:8080/search?searchTerm=${term}`)
+      .get(`${baseURL}/search?searchTerm=${term}`)
       .then((response) => {
         if (response.data) {
           setPosts(response.data);

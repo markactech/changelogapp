@@ -71,7 +71,7 @@
 .deteleicon {
   position: relative;
   left: 1%;
-  top: 240px;
+   top: 228px; 
   
   color: red;
 }
@@ -96,6 +96,6 @@
 .editicon{
   position: relative;
   left: 3%;
-  top: 240px;
+  top: 228px; 
   
 }

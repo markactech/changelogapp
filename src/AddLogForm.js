@@ -49,7 +49,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
 
           console.log("formData", formDatanew);
           response = await axios.put(
-            `${"http://localhost:8080"}/posts/${id}`,
+            `${baseURL}/posts/${id}`,
             formDatanew,
             {
               headers: {
@@ -67,7 +67,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
           console.log("formData", formData);
 
           response = await axios.post(
-            `${"http://localhost:8080"}/posts`,
+            `${baseURL}/posts`,
             formData,
             {
               headers: {
@@ -111,7 +111,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
   };
 
   const getPostbyid = async () => {
-    const postdata = await axios.get(`${"http://localhost:8080"}/posts/${id}`);
+    const postdata = await axios.get(`${baseURL}/posts/${id}`);
     setNewImageTitle(postdata?.data?.title);
     setNewImageDescription(postdata?.data?.description);
     setNewImageUrl(postdata?.data?.image);
