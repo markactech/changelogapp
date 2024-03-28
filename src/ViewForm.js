@@ -106,9 +106,10 @@ function ViewForm() {
   };
 
 console.log("loadeir",loader)
-  const sendEmailformultiple = () => {
+  const sendEmailformultiple =async () => {
 
     const getpostlist = posts?.filter(x => selectedPosts.includes(x.id))
+    const postarr=[]
     selectedEmails?.forEach(async (p, index) => {
       const postlist = getpostlist?.map(x => {
         return {
@@ -117,11 +118,24 @@ console.log("loadeir",loader)
         }
       })
 
+      
      
       postlist?.map(async (data) => {
-        try {
+         postarr.push(data)
+      
+
+
+      })
+
+    })
+    console.log("postarr",postarr)
+    const postarrobj ={
+      emails:selectedEmails,
+      post:postarr
+    }
+      try {
           setLoader(true)
-          await axios.post(`${baseURL}/sendEmail`, data);
+          await axios.post(`${baseURL}/sendEmail`, postarrobj);
           setShowToast(true)
           setToastMessage("Mail Send successfully");
 
@@ -130,11 +144,6 @@ console.log("loadeir",loader)
           setToastMessage("Failed to Send");
           console.error("Error deleting post:", error);
         }
-
-
-      })
-
-    })
     setTimeout(()=>setLoader(false),10000)
      setSelectedEmails([]);
     setSelectAll(false)
@@ -164,19 +173,18 @@ console.log("loadeir",loader)
       <div className="container mt-3 ">
         {posts.length > 0 ? (
           <>
-            <div className="mb-3 d-flex justify-content-between "
-        >
-            <div  className="d-flex justify-content-start">
+            <div className="mb-3 d-flex justify-content-between"style={{margin:"-89px"}}>
+            <div  className="d-flex justify-content-start" style={{position:"relative",top:"40px" ,left:"90px"}}>
               <input
                 type="checkbox"
                 checked={selectAll} // Check if all posts are selected
                 onChange={handleSelectAll}
-                className="large-checkbox"
-            
+                className=" form-check-input"
+              
               />
-             <label className="ms-2 mt-2">Select All </label> 
+             <label className="ms-2 ">Select All </label> 
             </div>
-              <div className="w-50  " style={{marginRight:"25%"}}  >
+              <div className= "" style={{marginRight:"45%" , position:"relative",top:"35px" , width:"40%"}}  >
                 <CreatableSelect
                   isMulti
                   isClearable
@@ -186,17 +194,9 @@ console.log("loadeir",loader)
                   styles={{}}
                 />
               </div>
-              <Button disabled={loader} onClick={sendEmailformultiple} style={{ position: "relative", right: "29%" }} >
-                {loader ? (
-                  <Spinner animation="border" size="sm" /> // Show spinner when loading
-                ) : (
-                  "Send"
-                )}
-
-              </Button>
+             
             </div>
 
-          
 
             <Toast
               show={showToast}
@@ -212,7 +212,15 @@ console.log("loadeir",loader)
 
               <Toast.Body>{toatermessage}</Toast.Body>
             </Toast>
+            <Button className="" disabled={loader} onClick={sendEmailformultiple} style={{ marginLeft:"47rem",position:"relative",bottom:"19px" }} >
+                {loader ? (
+                  <Spinner animation="border" size="sm" /> // Show spinner when loading
+                ) : (
+                  "Send"
+                )}
 
+              </Button>
+          
             <hr />
             {posts
               .filter(
@@ -226,7 +234,7 @@ console.log("loadeir",loader)
                     type="checkbox"
                     checked={selectedPosts.includes(post.id)}
                     onChange={() => handleCheckboxChange(post.id)}
-                    className="large-checkbox"
+                    className=" form-check-input"
                   />{" "}
                   <div
                     key={post.id}
