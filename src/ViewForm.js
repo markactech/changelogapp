@@ -191,6 +191,7 @@ console.log("loadeir",loader)
                   onChange={handleCreatableSelectChange}
                   options={allEmails}
                   value={selectedEmails}
+                  placeholder="Select / Enter Email..."
                   styles={{}}
                 />
               </div>
@@ -212,7 +213,7 @@ console.log("loadeir",loader)
 
               <Toast.Body>{toatermessage}</Toast.Body>
             </Toast>
-            <Button className="" disabled={loader} onClick={sendEmailformultiple} style={{ marginLeft:"47rem",position:"relative",bottom:"19px" }} >
+            <Button  disabled={loader} onClick={sendEmailformultiple} style={{ marginLeft:"57%",position:"relative",bottom:"19px" }} >
                 {loader ? (
                   <Spinner animation="border" size="sm" /> // Show spinner when loading
                 ) : (

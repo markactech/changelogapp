@@ -65,7 +65,7 @@ export default function SearchInput({
               <input
                 type="text"
                 className="form-control"
-                // style={{ width: "10px", position: "relative", left: "14%" }}
+                style={{  position: "relative", left: "41%" }}
                 aria-label="Text input with radio button"
                 placeholder="Search Entries..."
                 value={NewseachTerm}
