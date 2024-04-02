@@ -8,7 +8,7 @@ import SearchInput from "./SearchInput";
 import { HiPencilAlt } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
-import Footer from './component/Footer '
+import Footer from "./component/Footer ";
 import CreatableSelect from "react-select/creatable";
 import "./ViewForm.css";
 import { CiSearch } from "react-icons/ci";
@@ -21,13 +21,13 @@ function ViewForm() {
   const [showFullDescription, setShowFullDescription] = useState({});
   const [selectAll, setSelectAll] = useState(false);
   const [allEmails, setAllEmails] = useState([]);
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
   const [selectedEmails, setSelectedEmails] = useState([]);
   const navigate = useNavigate();
-  const [showToast, setShowToast] = useState(false)
-  const [toatermessage, setToastMessage] = useState("")
-  const [NewseachTerm, setNewSearchTerm] = useState("")
-  const baseURL = "http://localhost:8080"; 
+  const [showToast, setShowToast] = useState(false);
+  const [toatermessage, setToastMessage] = useState("");
+  const [NewseachTerm, setNewSearchTerm] = useState("");
+  const baseURL = "http://localhost:8080";
   const toggleDescription = (postId) => {
     setShowFullDescription({
       ...showFullDescription,
@@ -37,25 +37,25 @@ function ViewForm() {
   useEffect(() => {
     getAllEmails(); // Fetch all emails
   }, []);
-  console.log("selectAll", selectedPosts)
+  console.log("selectAll", selectedPosts);
   const getAllEmails = async () => {
     try {
       const response = await axios.get(`${baseURL}/emaillist`);
       console.log("response", response?.data);
-      const allemail = response?.data?.map(x => {
+      const allemail = response?.data?.map((x) => {
         return {
           label: x?.email,
-          value: x?.email
-        }
-      })
+          value: x?.email,
+        };
+      });
       setAllEmails(allemail);
     } catch (error) {
       console.error("Error fetching emails:", error);
     }
   };
   const setPasstoparent = (data) => {
-    setNewSearchTerm(data)
-  }
+    setNewSearchTerm(data);
+  };
   useEffect(() => {
     console.log("Fetching posts...");
     axios
@@ -99,57 +99,47 @@ function ViewForm() {
     });
   };
 
-
   const handleCreatableSelectChange = (newValue) => {
     console.log("Selected mails:", newValue);
     setSelectedEmails(newValue);
   };
 
-console.log("loadeir",loader)
-  const sendEmailformultiple =async () => {
-
-    const getpostlist = posts?.filter(x => selectedPosts.includes(x.id))
-    const postarr=[]
+  console.log("loadeir", loader);
+  const sendEmailformultiple = async () => {
+    const getpostlist = posts?.filter((x) => selectedPosts.includes(x.id));
+    const postarr = [];
     selectedEmails?.forEach(async (p, index) => {
-      const postlist = getpostlist?.map(x => {
+      const postlist = getpostlist?.map((x) => {
         return {
           ...x,
-          email: p?.value
-        }
-      })
+          email: p?.value,
+        };
+      });
 
-      
-     
       postlist?.map(async (data) => {
-         postarr.push(data)
-      
-
-
-      })
-
-    })
-    console.log("postarr",postarr)
-    const postarrobj ={
-      emails:selectedEmails,
-      post:postarr
+        postarr.push(data);
+      });
+    });
+    console.log("postarr", postarr);
+    const postarrobj = {
+      emails: selectedEmails,
+      post: postarr,
+    };
+    try {
+      setLoader(true);
+      await axios.post(`${baseURL}/sendEmail`, postarrobj);
+      setShowToast(true);
+      setToastMessage("Mail Send successfully");
+    } catch (error) {
+      setShowToast(true);
+      setToastMessage("Failed to Send");
+      console.error("Error deleting post:", error);
     }
-      try {
-          setLoader(true)
-          await axios.post(`${baseURL}/sendEmail`, postarrobj);
-          setShowToast(true)
-          setToastMessage("Mail Send successfully");
-
-        } catch (error) {
-          setShowToast(true)
-          setToastMessage("Failed to Send");
-          console.error("Error deleting post:", error);
-        }
-    setTimeout(()=>setLoader(false),10000)
-     setSelectedEmails([]);
-    setSelectAll(false)
-    setSelectedPosts([])
-
-  }
+    setTimeout(() => setLoader(false), 10000);
+    setSelectedEmails([]);
+    setSelectAll(false);
+    setSelectedPosts([]);
+  };
   const handleSelectAll = () => {
     if (!selectAll) {
       const allPostIds = posts.map((post) => post.id);
@@ -168,23 +158,35 @@ console.log("loadeir",loader)
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         setPasstoparent={setPasstoparent}
-
       />
       <div className="container mt-3 ">
         {posts.length > 0 ? (
           <>
-            <div className="mb-3 d-flex justify-content-between"style={{margin:"-89px"}}>
-            <div  className="d-flex justify-content-start" style={{position:"relative",top:"40px" ,left:"90px"}}>
-              <input
-                type="checkbox"
-                checked={selectAll} // Check if all posts are selected
-                onChange={handleSelectAll}
-                className=" form-check-input"
-              
-              />
-             <label className="ms-2 ">Select All </label> 
-            </div>
-              <div className= "" style={{marginRight:"45%" , position:"relative",top:"35px" , width:"40%"}}  >
+            <div
+              className="mb-3 d-flex justify-content-between"
+              style={{ margin: "-89px" }}
+            >
+              <div
+                className="d-flex justify-content-start"
+                style={{ position: "relative", top: "40px", left: "90px" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectAll} // Check if all posts are selected
+                  onChange={handleSelectAll}
+                  className=" form-check-input"
+                />
+                <label className="ms-2 ">Select All </label>
+              </div>
+              <div
+                className=""
+                style={{
+                  marginRight: "45%",
+                  position: "relative",
+                  top: "35px",
+                  width: "40%",
+                }}
+              >
                 <CreatableSelect
                   isMulti
                   isClearable
@@ -195,33 +197,41 @@ console.log("loadeir",loader)
                   styles={{}}
                 />
               </div>
-             
             </div>
-
 
             <Toast
               show={showToast}
               onClose={() => setShowToast(false)}
-
               className={
                 toatermessage.includes("Failed") ? "bg-danger" : "bg-success"
               }
-
               autohide
-              style={{ color: "white", position: 'absolute', top: '80px', right: '10px', zIndex: 9999 }}              >
-
-
+              style={{
+                color: "white",
+                position: "absolute",
+                top: "80px",
+                right: "10px",
+                zIndex: 9999,
+              }}
+            >
               <Toast.Body>{toatermessage}</Toast.Body>
             </Toast>
-            <Button  disabled={loader} onClick={sendEmailformultiple} style={{ marginLeft:"57%",position:"relative",bottom:"19px" }} >
-                {loader ? (
-                  <Spinner animation="border" size="sm" /> // Show spinner when loading
-                ) : (
-                  "Send"
-                )}
+            <Button
+              disabled={loader}
+              onClick={sendEmailformultiple}
+              style={{
+                marginLeft: "57%",
+                position: "relative",
+                bottom: "19px",
+              }}
+            >
+              {loader ? (
+                <Spinner animation="border" size="sm" /> // Show spinner when loading
+              ) : (
+                "Send"
+              )}
+            </Button>
 
-              </Button>
-          
             <hr />
             {posts
               .filter(
@@ -237,11 +247,7 @@ console.log("loadeir",loader)
                     onChange={() => handleCheckboxChange(post.id)}
                     className=" form-check-input"
                   />{" "}
-                  <div
-                    key={post.id}
-                    className={styles.groupbox}
-
-                  >
+                  <div key={post.id} className={styles.groupbox}>
                     <div className={styles.dateandnew}>
                       <p className={styles.date}>
                         {moment(post.createdAt).format("MMMM D ,yyyy")}
@@ -252,8 +258,8 @@ console.log("loadeir",loader)
                             post.tag === "New"
                               ? "badge green"
                               : post.tag === "Improved"
-                                ? "badge blue"
-                                : "badge yellow"
+                              ? "badge blue"
+                              : "badge yellow"
                           }
                           style={{}}
                         >
@@ -289,14 +295,21 @@ console.log("loadeir",loader)
                         )}{" "}
                         {/* Use icons */}
                       </Button>
-
                     </div>
                     <div>
                       <div className={styles.descrip}>
                         {showFullDescription[post.id] ? (
-                          <p>{post.description}</p>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: post.description,
+                            }}
+                          />
                         ) : (
-                          <p>{post.description.substring(0, 200)}</p>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: post.description.substring(0, 200),
+                            }}
+                          />
                         )}
                         {showFullDescription[post.id] && (
                           <>
@@ -333,13 +346,24 @@ console.log("loadeir",loader)
         ) : (
           <div>
             <div className="d-flex justify-content-center text-secondary  ">
-              < CiSearch style={{ color: "", width: 100, height: "100", fontWeight: "100" }} />
+              <CiSearch
+                style={{
+                  color: "",
+                  width: 100,
+                  height: "100",
+                  fontWeight: "100",
+                }}
+              />
             </div>
-            <p className="d-flex justify-content-center">We couldn’t find any changelog entries matching<span className="fw-bold">"{NewseachTerm}"</span> </p>
-            <p className="d-flex justify-content-center">Try searching for other keywords.</p>
+            <p className="d-flex justify-content-center">
+              We couldn’t find any changelog entries matching
+              <span className="fw-bold">"{NewseachTerm}"</span>{" "}
+            </p>
+            <p className="d-flex justify-content-center">
+              Try searching for other keywords.
+            </p>
           </div>
         )}
-
       </div>
       <Footer />
     </>

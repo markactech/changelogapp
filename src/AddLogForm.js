@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios"; // Import Axios library
 import { Badge, Nav, Spinner, Tab, Toast } from "react-bootstrap";
 import { CiSearch } from "react-icons/ci";
+import ReactQuill from "react-quill";
 
 const AddLogForm = ({ sendData, updatePreviewData }) => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
   const [toastMessage, setToastMessage] = useState(""); // State for toast message
   const [showToast, setShowToast] = useState(false); // State for showing toast
   const baseURL = "http://localhost:8080"; // Update this with your actual backend URL
-
+console.log("value",newImageDescription)
   const [activeTab, setActiveTab] = useState("add");
 
   const handleTabSelect = (tab) => {
@@ -49,7 +50,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
 
           console.log("formData", formDatanew);
           response = await axios.put(
-            `${baseURL}/posts/${id}`,
+            `${"http://localhost:8080"}/posts/${id}`,
             formDatanew,
             {
               headers: {
@@ -64,10 +65,10 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
           formData.append("email", email);
           formData.append("image", newImageFile);
           formData.append("type", logType);
-          console.log("formData", formData);
+          console.log("formData *****************", formData);
 
           response = await axios.post(
-            `${baseURL}/posts`,
+            `${"http://localhost:8080"}/posts`,
             formData,
             {
               headers: {
@@ -122,6 +123,7 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
       getPostbyid();
     }
   }, [id]);
+  
 
   return (
     <div className="container mt-3">
@@ -185,13 +187,15 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                       </label>
                     </div>
                     <div className="col-md-12">
-                      <textarea
-                        className="form-control  "
-                        rows="5"
-                        placeholder="Enter Description"
-                        value={newImageDescription}
-                        onChange={(e) => setNewImageDescription(e.target.value)}
-                      />
+                      <div className="col-md-12 mb-5">
+                        <ReactQuill
+                          value={newImageDescription}
+                          onChange={setNewImageDescription}
+                          theme="snow"
+                          style={{height:"100px"}}
+                          placeholder="Enter Description"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -308,11 +312,15 @@ const AddLogForm = ({ sendData, updatePreviewData }) => {
                 </div>
               ) : (
                 <div>
-                <div className="d-flex justify-content-center text-secondary  ">
-                 {/* < CiSearch  style={{color:"",width:100,height:"100",fontWeight:"100"}} /> */}
-                </div>
-                <p className="d-flex justify-content-center  ">No Preview Found's</p>
-                <p className="d-flex justify-content-center   ">Try To Add ChangeLog</p>
+                  <div className="d-flex justify-content-center text-secondary  ">
+                    {/* < CiSearch  style={{color:"",width:100,height:"100",fontWeight:"100"}} /> */}
+                  </div>
+                  <p className="d-flex justify-content-center  ">
+                    No Preview Found's
+                  </p>
+                  <p className="d-flex justify-content-center   ">
+                    Try To Add ChangeLog
+                  </p>
                 </div>
               )}
             </div>
